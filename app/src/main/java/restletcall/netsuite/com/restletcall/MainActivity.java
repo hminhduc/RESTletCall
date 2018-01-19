@@ -85,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("myResponse",myResponse);
                         try {
                             JSONObject jsonResponse = new JSONObject(myResponse);
-                            JSONObject error = jsonResponse.getJSONObject("error");
-                            if(error != null){
-                                String message = error.getString("message");
+                            if(jsonResponse.has("error")) {
+                                JSONObject errorResponse = jsonResponse.getJSONObject("error");
+                                // get the value and do something with it
+                                String message = errorResponse.getString("message");
                                 JSONObject jsonMessage = new JSONObject(message);
                                 Toast toast = Toast.makeText(MainActivity.this,jsonMessage.getString("message"),Toast.LENGTH_LONG);
                                 toast.show();
+                                tvName.setText("");
                             }else{
                                 String type = jsonResponse.getString("type");
                                 JSONObject fields = jsonResponse.getJSONObject("fields");
