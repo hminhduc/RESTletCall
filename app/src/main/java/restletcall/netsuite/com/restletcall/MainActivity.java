@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
     String id;
     private ProgressDialog pd;
-    private TextView tvName;
+    private EditText etTitle;
+    private EditText etName;
 
     private String url= "https://rest.na2.netsuite.com/app/site/hosting/restlet.nl?script=126&deploy=1";
     @Override
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final EditText etID = (EditText) findViewById(R.id.etID);
         final Button bGet = (Button) findViewById(R.id.bGet);
-        tvName = (TextView) findViewById(R.id.tvName);
-        TextView tvSublistLine = (TextView) findViewById(R.id.tvSublistLine);
+        etTitle = (EditText) findViewById(R.id.etTitle);
+        etName = (EditText) findViewById(R.id.etName);
 
         bGet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,11 +93,13 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject jsonMessage = new JSONObject(message);
                                 Toast toast = Toast.makeText(MainActivity.this,jsonMessage.getString("message"),Toast.LENGTH_LONG);
                                 toast.show();
-                                tvName.setText("");
+                                etTitle.setText("");
+                                etName.setText("");
                             }else{
                                 String type = jsonResponse.getString("type");
                                 JSONObject fields = jsonResponse.getJSONObject("fields");
-                                tvName.setText(fields.getString("name"));
+                                etTitle.setText(fields.getString("custrecord_title_test"));
+                                etName.setText(fields.getString("custrecord_customer"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

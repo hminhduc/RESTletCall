@@ -3,4 +3,8 @@
     <string name="textview">TextView</string>
     <string name="get">Get</string>
     <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="title">Title</string>
+    <string name="update">Update</string>
+    <string name="new">New</string>
 </resources>
