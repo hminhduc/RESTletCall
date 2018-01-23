@@ -6,5 +6,7 @@
     <string name="name">Name</string>
     <string name="title">Title</string>
     <string name="update">Update</string>
-    <string name="new">New</string>
+    <string name="new_string">New</string>
+    <string name="customer">Customer</string>
+    <string name="record">Record</string>
 </resources>
