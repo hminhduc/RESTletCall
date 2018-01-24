@@ -1,5 +1,8 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +41,9 @@ import android.widget.ArrayAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    OkHttpClient client = new OkHttpClient();
     String id;
     private ProgressDialog pd;
+    private EditText etID;
     private EditText etTitle;
     private Spinner spCustomer;
     private ArrayAdapter  adapter;
@@ -55,13 +59,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        final EditText etID = (EditText) findViewById(R.id.etID);
+        etID = (EditText) findViewById(R.id.etID);
         final Button bGet = (Button) findViewById(R.id.bGet);
         final Button bUpdate = (Button) findViewById(R.id.bUpdate);
         final Button bNew = (Button) findViewById(R.id.bNew);
         etTitle = (EditText) findViewById(R.id.etTitle);
         spCustomer = (Spinner) findViewById(R.id.spCustomer);
-
         bGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         bNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this,NewRecordActivity.class);
+                MainActivity.this.startActivity(intent);
             }
         });
     }
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String myResponse = response.body().string();
-                Log.d("myResponse",myResponse);
+                //Log.d("myResponse",myResponse);
                 try {
                     JSONArray jsonArray = new JSONArray(myResponse);
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -178,6 +182,35 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             });
+                            Intent intent = getIntent();
+                            Bundle extras = getIntent().getExtras();
+                            if (extras != null) {
+                                String myResponse = extras.getString("myResponse");
+                                try {
+                                    JSONObject jsonResponse = new JSONObject(myResponse);
+                                    if(jsonResponse.has("error")) {
+                                        JSONObject errorResponse = jsonResponse.getJSONObject("error");
+                                        // get the value and do something with it
+                                        String message = errorResponse.getString("message");
+                                        JSONObject jsonMessage = new JSONObject(message);
+                                        Toast toast = Toast.makeText(MainActivity.this,jsonMessage.getString("message"),Toast.LENGTH_LONG);
+                                        toast.show();
+                                        etTitle.setText("");
+                                    }else{
+                                        id = jsonResponse.getString("id");
+                                        etID.setText(id);
+                                        JSONObject fields = jsonResponse.getJSONObject("fields");
+                                        etTitle.setText(fields.getString("custrecord_title_test"));
+                                        final String customerid = fields.getString("custrecord_customer");
+                                        for(int i = 0; i < customerList.size(); i++){
+                                            if(customerid.equals(customerList.get(i).getId()))
+                                                spCustomer.setSelection(i);
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     });
                 } catch (JSONException e) {
@@ -210,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         pd.dismiss();
-                        Log.d("myResponse",myResponse);
+                        //Log.d("myResponse",myResponse);
                         try {
                             JSONObject jsonResponse = new JSONObject(myResponse);
                             if(jsonResponse.has("error")) {
@@ -222,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
                                 toast.show();
                                 etTitle.setText("");
                             }else{
-                                String type = jsonResponse.getString("type");
                                 JSONObject fields = jsonResponse.getJSONObject("fields");
                                 etTitle.setText(fields.getString("custrecord_title_test"));
                                 final String customerid = fields.getString("custrecord_customer");

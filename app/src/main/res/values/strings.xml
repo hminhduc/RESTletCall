@@ -9,4 +9,5 @@
     <string name="new_string">New</string>
     <string name="customer">Customer</string>
     <string name="record">Record</string>
+    <string name="create">Create</string>
 </resources>
