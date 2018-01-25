@@ -92,6 +92,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/new_string" />
+
+        <Button
+            android:id="@+id/bPrint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/print" />
     </LinearLayout>
 
 </LinearLayout>

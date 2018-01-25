@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         final Button bGet = (Button) findViewById(R.id.bGet);
         final Button bUpdate = (Button) findViewById(R.id.bUpdate);
         final Button bNew = (Button) findViewById(R.id.bNew);
+        final Button bPrint = (Button) findViewById(R.id.bPrint);
         etTitle = (EditText) findViewById(R.id.etTitle);
         spCustomer = (Spinner) findViewById(R.id.spCustomer);
         bGet.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,NewRecordActivity.class);
                 MainActivity.this.startActivity(intent);
+            }
+        });
+
+        bPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(id != null){
+                    String title = etTitle.getText().toString();
+                    Customer customer = (Customer) spCustomer.getSelectedItem();
+                    Intent intent = new Intent(MainActivity.this,PrintPdfActivity.class);
+                    intent.putExtra("id", id);
+                    intent.putExtra("title", title);
+                    intent.putExtra("customer", customer.toString());
+                    MainActivity.this.startActivity(intent);
+                }else{
+                    Toast toast = Toast.makeText(MainActivity.this,"Please get record",Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
     }
