@@ -1,9 +1,14 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.github.barteksc.pdfviewer.PDFView;
@@ -18,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.security.Permissions;
 
 public class PrintPdfActivity extends AppCompatActivity {
 
@@ -42,6 +48,7 @@ public class PrintPdfActivity extends AppCompatActivity {
         }
     }
 
+
     public void cretePdf(String id, String title, String customer) throws FileNotFoundException {
         try {
             Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
@@ -52,11 +59,11 @@ public class PrintPdfActivity extends AppCompatActivity {
             Document document = new Document(PageSize.A4);
 
             String root = Environment.getExternalStorageDirectory().toString();
+            Log.d("root", root);
             File myDir = new File(root + "/PDF");
             myDir.mkdirs();
 
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
-
             document.open();
             Paragraph prProfile = new Paragraph();
             prProfile.setFont(smallBold);
