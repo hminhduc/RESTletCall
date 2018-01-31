@@ -11,4 +11,8 @@
     <string name="record">Record</string>
     <string name="create">Create</string>
     <string name="print">Print</string>
+    <string name="logo">Logo</string>
+    <string name="IdTitle">従業員</string>
+    <string name="password">パスワード</string>
+    <string name="login">ログイン</string>
 </resources>

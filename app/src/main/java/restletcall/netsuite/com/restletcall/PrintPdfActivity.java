@@ -1,41 +1,25 @@
 package restletcall.netsuite.com.restletcall;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
-import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.util.Log;
-import android.view.View;
 
 import com.github.barteksc.pdfviewer.PDFView;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.ColumnText;
+
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfName;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -46,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.security.Permissions;
 
 public class PrintPdfActivity extends AppCompatActivity {
 
@@ -90,6 +73,7 @@ public class PrintPdfActivity extends AppCompatActivity {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
             writer.setPageEvent(new MyFooter());
             document.open();
+
             Paragraph prProfile = new Paragraph();
             prProfile.setFont(smallBold);
             prProfile.add("\n \nID : "+id+"\n");
@@ -108,7 +92,6 @@ public class PrintPdfActivity extends AppCompatActivity {
     }
 
     class MyFooter extends PdfPageEventHelper {
-        Font ffont = new Font(Font.FontFamily.UNDEFINED, 5, Font.ITALIC);
 
         public void onEndPage(PdfWriter writer, Document document) {
             addHeader(writer);
