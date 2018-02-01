@@ -15,4 +15,22 @@
     <string name="IdTitle">従業員</string>
     <string name="password">パスワード</string>
     <string name="login">ログイン</string>
+    <string name="email">Email</string>
+    <string name="account">Account</string>
+    <string name="save">保存</string>
+    <string name="cancle">キャンセル</string>
+    <string name="url">URL</string>
+    <string name="nlauth_signature">nlauth_signature</string>
+    <string name="nlauth_email">nlauth_email</string>
+    <string name="nlauth_account">nlauth_account</string>
+    <string name="signature">Signature</string>
+
+    <string  name="accountVal"></string>
+    <string  name="emailVal"></string>
+    <string  name="signVal"></string>
+    <string  name="urlVal"></string>
+    <string name="todo">TODO</string>
+    <string name="setting">管理者設定画面</string>
+
+
 </resources>
