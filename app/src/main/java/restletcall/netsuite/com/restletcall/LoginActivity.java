@@ -1,8 +1,10 @@
 package restletcall.netsuite.com.restletcall;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -57,7 +60,13 @@ public class LoginActivity extends AppCompatActivity  {
                 String account = sharedPref.getString("account","");
                 String email = sharedPref.getString("email","");
                 String sign = sharedPref.getString("sign","");
-                if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
+                if(!isInternetAvailable()) {
+                    Toast toast = Toast.makeText(LoginActivity.this, "Internet not available", Toast.LENGTH_LONG);
+                    toast .show();
+                }else if(isNetworkConnected()){
+                    Toast toast = Toast.makeText(LoginActivity.this, "Network not connected", Toast.LENGTH_LONG);
+                    toast.show();
+                }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
                     Toast toast = Toast.makeText(LoginActivity.this, "Please input setting", Toast.LENGTH_LONG);
                     toast.show();
                 }else if(entityid.isEmpty()){
@@ -143,5 +152,22 @@ public class LoginActivity extends AppCompatActivity  {
                 }
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
