@@ -25,12 +25,14 @@
     <string name="nlauth_account">nlauth_account</string>
     <string name="signature">Signature</string>
 
-    <string  name="accountVal"></string>
-    <string  name="emailVal"></string>
-    <string  name="signVal"></string>
-    <string  name="urlVal"></string>
+    <string name="accountVal"></string>
+    <string name="emailVal"></string>
+    <string name="signVal"></string>
+    <string name="urlVal"></string>
     <string name="todo">TODO</string>
     <string name="setting">管理者設定画面</string>
+    <string name="refresh">メニュー</string>
+    <string name="stop">メニュー</string>
 
 
 </resources>

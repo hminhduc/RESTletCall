@@ -25,6 +25,13 @@ public class SettingActivity extends AppCompatActivity {
         final Button bSave = (Button) findViewById(R.id.bSave);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
 
+        SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
+        sharedPref.getString("account","");
+        etAccount.setText(sharedPref.getString("account",""));
+        etEmail.setText(sharedPref.getString("email",""));
+        etSign.setText(sharedPref.getString("sign",""));
+        etUrl.setText(sharedPref.getString("url","https://"));
+
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
