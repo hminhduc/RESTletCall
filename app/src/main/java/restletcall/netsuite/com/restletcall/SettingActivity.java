@@ -30,7 +30,7 @@ public class SettingActivity extends AppCompatActivity {
         etAccount.setText(sharedPref.getString("account",""));
         etEmail.setText(sharedPref.getString("email",""));
         etSign.setText(sharedPref.getString("sign",""));
-        etUrl.setText(sharedPref.getString("url","https://"));
+        etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl"));
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
