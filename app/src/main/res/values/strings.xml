@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RESTletCall</string>
+    <string name="app_name">NIDコイン回収アプリ</string>
     <string name="textview">TextView</string>
     <string name="get">Get</string>
     <string name="id">ID</string>
