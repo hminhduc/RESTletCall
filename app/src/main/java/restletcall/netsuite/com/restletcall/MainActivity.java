@@ -3,8 +3,6 @@ package restletcall.netsuite.com.restletcall;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 
@@ -25,8 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +33,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.HttpUrl;
-import okhttp3.ResponseBody;
 import android.widget.ArrayAdapter;
 
 
