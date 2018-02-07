@@ -37,13 +37,36 @@
                         android:layout_width="212dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="顧客 " />
+                        android:text="@string/customer" />
 
                     <Spinner
-                        android:id="@+id/spinner"
+                        android:id="@+id/spCustomer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="212dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/collection_date" />
+
+                    <EditText
+                        android:id="@+id/etDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="date" />
 
                 </LinearLayout>
 
@@ -53,21 +76,14 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView9"
+                    <Button
+                        android:id="@+id/bSelect"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="回収日 " />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="date" />
-
+                        android:text="@string/select" />
                 </LinearLayout>
+
             </LinearLayout>
         </FrameLayout>
 

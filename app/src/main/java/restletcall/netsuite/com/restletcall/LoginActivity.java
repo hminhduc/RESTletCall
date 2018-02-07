@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity  {
         final Button bLogin = (Button) findViewById(R.id.bLogin);
         final ImageView ivLogo = (ImageView) findViewById(R.id.ivLogo);
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-        Toast.makeText(LoginActivity.this, sharedPref.getString("entityid",""), Toast.LENGTH_SHORT).show();
         final EditText etAccount = (EditText) findViewById(R.id.etAccount);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         etAccount.setText(sharedPref.getString("entityid",""));
