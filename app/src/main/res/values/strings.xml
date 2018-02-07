@@ -1,6 +1,40 @@
 <resources>
-    <string name="app_name">RESTletCall</string>
+    <string name="app_name">NIDコイン回収アプリ</string>
     <string name="textview">TextView</string>
     <string name="get">Get</string>
     <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="title">Title</string>
+    <string name="update">Update</string>
+    <string name="new_string">New</string>
+    <string name="customer">顧客</string>
+    <string name="record">Record</string>
+    <string name="create">Create</string>
+    <string name="print">Print</string>
+    <string name="logo">Logo</string>
+    <string name="IdTitle">従業員</string>
+    <string name="password">パスワード</string>
+    <string name="login">ログイン</string>
+    <string name="email">Email</string>
+    <string name="account">Account</string>
+    <string name="save">保存</string>
+    <string name="cancle">キャンセル</string>
+    <string name="url">接続先URL</string>
+    <string name="nlauth_signature">認証パスワード</string>
+    <string name="nlauth_email">認証メールアドレス</string>
+    <string name="nlauth_account">認証アカウント</string>
+    <string name="signature">Signature</string>
+
+    <string name="accountVal"></string>
+    <string name="emailVal"></string>
+    <string name="signVal"></string>
+    <string name="urlVal"></string>
+    <string name="todo">TODO</string>
+    <string name="setting">管理者設定画面</string>
+    <string name="refresh">メニュー</string>
+    <string name="stop">メニュー</string>
+    <string name="collection_date">回収日</string>
+    <string name="select">選択</string>
+
+
 </resources>
