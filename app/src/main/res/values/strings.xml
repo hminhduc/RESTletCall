@@ -19,10 +19,10 @@
     <string name="account">Account</string>
     <string name="save">保存</string>
     <string name="cancle">キャンセル</string>
-    <string name="url">URL</string>
-    <string name="nlauth_signature">nlauth_signature</string>
-    <string name="nlauth_email">nlauth_email</string>
-    <string name="nlauth_account">nlauth_account</string>
+    <string name="url">接続先URL</string>
+    <string name="nlauth_signature">認証パスワード</string>
+    <string name="nlauth_email">認証メールアドレス</string>
+    <string name="nlauth_account">認証アカウント</string>
     <string name="signature">Signature</string>
 
     <string name="accountVal"></string>
