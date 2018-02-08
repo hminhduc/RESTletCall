@@ -75,7 +75,7 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="12">
+                    android:layout_weight="9">
 
                     <ScrollView
                         android:layout_width="match_parent"
@@ -393,14 +393,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Button" />
+                        android:text="@string/save" />
 
                     <Button
                         android:id="@+id/button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Button" />
+                        android:text="@string/cancle" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
