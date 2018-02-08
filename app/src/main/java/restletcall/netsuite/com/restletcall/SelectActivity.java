@@ -59,9 +59,12 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
 
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
         spCustomer = (Spinner) findViewById(R.id.spCustomer);
+        Calendar newDate = Calendar.getInstance();
+        etDate.setText(sdf.format(newDate.getTime()));
         try {
             getCustomer();
         } catch (IOException e) {
@@ -81,15 +84,14 @@ public class SelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Calendar newDate = Calendar.getInstance();
-                final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String dateString = etDate.getText().toString();
                 if(dateString.isEmpty()){
                     dateString = sdf.format(newDate.getTime());
                 }
                 String strArrtmp[]=dateString.split("/");
-                int intDay = Integer.parseInt(strArrtmp[0]);
+                int intDay = Integer.parseInt(strArrtmp[2]);
                 int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
-                int intYear =Integer.parseInt(strArrtmp[2]);
+                int intYear =Integer.parseInt(strArrtmp[0]);
                 Log.d("date", dateString);
                 DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
                     @Override
