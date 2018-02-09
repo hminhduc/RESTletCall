@@ -1,18 +1,10 @@
 package restletcall.netsuite.com.restletcall;
 
 import android.content.Intent;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     List<Customer> customerList = new ArrayList<Customer>();
@@ -35,10 +27,11 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_edit);
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
-        final Button bEdit = (Button) findViewById(R.id.bEdit);
+        final Button bCancle = (Button) findViewById(R.id.bCancle);
+
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         String customerRespone = extras.getString("customerRespone");
@@ -55,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
                     Customer customer = new Customer(id, valuesObject.getString("entityid"),valuesObject.getString("companyname"), valuesObject.getString("firstName"), valuesObject.getString("lastName"), valuesObject.getString("middleName"));
                     customerList.add(customer);
                 }
-                adapter = new CustomerAdapter(MenuActivity.this,
+                adapter = new CustomerAdapter(EditActivity.this,
                         android.R.layout.simple_spinner_item,
                         customerList);
                 spCustomer.setAdapter(adapter);
@@ -75,76 +68,14 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
         etDate.setText(extras.getString("date"));
-        configureNavigationDrawer();
-        configureToolbar();
-
-        bEdit.setOnClickListener(new View.OnClickListener() {
+        
+        bCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.setClass(MenuActivity.this, EditActivity.class);
-                //Intent intent = new Intent(MenuActivity.this, EditActivity.class);
-                MenuActivity.this.startActivity(intent);
+                intent.setClass(EditActivity.this, MenuActivity.class);
+                EditActivity.this.startActivity(intent);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    private void configureToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_action_menu_white);
-        actionbar.setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void configureNavigationDrawer() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.menu_layout);
-        NavigationView navView = (NavigationView) findViewById(R.id.navigation);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                Fragment f = null;
-                int itemId = menuItem.getItemId();
-
-                if (itemId == R.id.refresh) {
-                    Log.d("click","stop");
-                } else if (itemId == R.id.stop) {
-                    Log.d("click","stop");
-                }
-
-                if (f != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.frame, f);
-                    transaction.commit();
-                    drawerLayout.closeDrawers();
-                    return true;
-                }
-
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        switch(itemId) {
-            // Android home
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-
-            // manage other entries if you have it ...
-        }
-
-        return true;
     }
 }

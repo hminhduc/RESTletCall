@@ -276,7 +276,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -285,7 +285,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -294,7 +294,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -303,7 +303,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -369,7 +369,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -378,7 +378,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -387,7 +387,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -396,7 +396,7 @@
                                     android:textAlignment="center"
                                     android:textSize="14sp" />
 
-                                <TextView
+                                <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
@@ -416,18 +416,18 @@
                     android:layout_weight="1">
 
                     <Button
-                        android:id="@+id/bEdit"
+                        android:id="@+id/button2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="編集" />
+                        android:text="保存" />
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/bCancle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="印刷" />
+                        android:text="キャンセル" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
