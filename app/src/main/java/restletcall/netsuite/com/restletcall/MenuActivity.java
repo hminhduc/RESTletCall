@@ -29,7 +29,7 @@ import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
+    //private DrawerLayout drawerLayout;
     List<Customer> customerList = new ArrayList<Customer>();
     private ArrayAdapter adapter;
     @Override
@@ -39,6 +39,7 @@ public class MenuActivity extends AppCompatActivity {
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bEdit = (Button) findViewById(R.id.bEdit);
+        final Button bPrint = (Button) findViewById(R.id.bPrint);
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         String customerRespone = extras.getString("customerRespone");
@@ -75,8 +76,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
         etDate.setText(extras.getString("date"));
-        configureNavigationDrawer();
-        configureToolbar();
+        /*configureNavigationDrawer();
+        configureToolbar();*/
 
         bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +88,22 @@ public class MenuActivity extends AppCompatActivity {
                 MenuActivity.this.startActivity(intent);
             }
         });
+
+        bPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                intent.putExtra("id", "1");
+                intent.putExtra("title", "AA");
+                intent.putExtra("customer", "ありがたい");
+                intent.setClass(MenuActivity.this, PrintPdfActivity.class);
+                //Intent intent = new Intent(MenuActivity.this, EditActivity.class);
+                MenuActivity.this.startActivity(intent);
+            }
+        });
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -146,5 +160,5 @@ public class MenuActivity extends AppCompatActivity {
         }
 
         return true;
-    }
+    }*/
 }

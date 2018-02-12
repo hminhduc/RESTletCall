@@ -18,6 +18,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
@@ -58,6 +59,8 @@ public class PrintPdfActivity extends AppCompatActivity {
         try {
 
             Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+            BaseFont urName = BaseFont.createFont("assets/font/Mincho.otf", BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
+            Font urFontName = new Font(urName, 12);
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD
                     | Font.UNDERLINE, BaseColor.GRAY);
             Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
@@ -72,11 +75,10 @@ public class PrintPdfActivity extends AppCompatActivity {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
             writer.setPageEvent(new MyFooter());
             document.open();
-
             Paragraph prProfile = new Paragraph();
-            prProfile.setFont(smallBold);
+            prProfile.setFont(urFontName);
             prProfile.add("\n \nID : "+id+"\n");
-            prProfile.setFont(normal);
+            prProfile.setFont(urFontName);
             prProfile.add("\nTitle : "+title+ "\nCustomer : "+customer+"\n");
 
             prProfile.setFont(smallBold);

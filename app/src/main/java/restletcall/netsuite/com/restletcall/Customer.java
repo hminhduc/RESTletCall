@@ -71,9 +71,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        if(firstName.isEmpty())
-            return  entityid + ' ' + companyname ;
-        else
-            return  entityid + ' '+ lastName + ' '+ middleName + ' '+ firstName ;
+        return  entityid;
     }
 }
