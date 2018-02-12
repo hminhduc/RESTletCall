@@ -21,7 +21,6 @@ import java.util.List;
 
 public class EditActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     List<Customer> customerList = new ArrayList<Customer>();
     private ArrayAdapter adapter;
     @Override
@@ -68,7 +67,7 @@ public class EditActivity extends AppCompatActivity {
             }
         }
         etDate.setText(extras.getString("date"));
-        
+
         bCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
