@@ -76,8 +76,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
         etDate.setText(extras.getString("date"));
-        /*configureNavigationDrawer();
-        configureToolbar();*/
+        //configureNavigationDrawer();
+        configureToolbar();
 
         bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +93,6 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.putExtra("id", "1");
-                intent.putExtra("title", "AA");
-                intent.putExtra("customer", "ありがたい");
                 intent.setClass(MenuActivity.this, PrintPdfActivity.class);
                 //Intent intent = new Intent(MenuActivity.this, EditActivity.class);
                 MenuActivity.this.startActivity(intent);
@@ -103,6 +100,25 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    private void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelectActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);

@@ -35,8 +35,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="売上表示画面"
                     android:gravity="center"
+                    android:text="売上表示画面"
+                    android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
@@ -109,7 +110,7 @@
                     android:layout_weight="9">
 
                     <ScrollView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:fillViewport="false"
@@ -174,7 +175,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_width="120dp"
+                                    android:layout_width="150dp"
                                     android:layout_margin="1dp"
                                     android:background="@android:color/holo_blue_light"
                                     android:text="前回カウンタ"
@@ -184,7 +185,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_width="120dp"
+                                    android:layout_width="150dp"
                                     android:layout_margin="1dp"
                                     android:background="@android:color/holo_blue_light"
                                     android:text="今回カウンタ"
@@ -194,7 +195,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:layout_width="120dp"
+                                    android:layout_width="150dp"
                                     android:layout_margin="1dp"
                                     android:background="@android:color/holo_blue_light"
                                     android:text="カウンタ差分"

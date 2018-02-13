@@ -1,12 +1,16 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +42,30 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (ContextCompat.checkSelfPermission(LoginActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(LoginActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
         final Button bLogin = (Button) findViewById(R.id.bLogin);
         final ImageView ivLogo = (ImageView) findViewById(R.id.ivLogo);
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
@@ -53,10 +81,10 @@ public class LoginActivity extends AppCompatActivity  {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("entityid", entityid);
                 editor.apply();
-                String url = sharedPref.getString("url","");
-                String account = sharedPref.getString("account","");
-                String email = sharedPref.getString("email","");
-                String sign = sharedPref.getString("sign","");
+                String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                String account = sharedPref.getString("account","4882653_SB1");
+                String email = sharedPref.getString("email","hminhduc@icloud.com");
+                String sign = sharedPref.getString("sign","Netsuite12345");
                 if(!isOnline()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "Internet not available. Check network connected", Toast.LENGTH_LONG);
                     toast .show();
