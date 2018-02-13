@@ -47,7 +47,7 @@ import okhttp3.Response;
 
 public class SelectActivity extends AppCompatActivity {
 
-    //private DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
     private Spinner spCustomer;
     private ArrayAdapter  adapter;
     private String customerRespone = "";
@@ -107,8 +107,28 @@ public class SelectActivity extends AppCompatActivity {
                 pic.show();
             }
         });
-        /*configureNavigationDrawer();
-        configureToolbar();*/
+        //configureNavigationDrawer();
+        configureToolbar();
+    }
+
+    private void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelectActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 
     /*@Override
@@ -172,10 +192,10 @@ public class SelectActivity extends AppCompatActivity {
 
     void getCustomer() throws IOException {
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-        String url = sharedPref.getString("url","");
-        String account = sharedPref.getString("account","");
-        String email = sharedPref.getString("email","");
-        String sign = sharedPref.getString("sign","");
+        String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
+        String account = sharedPref.getString("account","4882653_SB1");
+        String email = sharedPref.getString("email","hminhduc@icloud.com");
+        String sign = sharedPref.getString("sign","Netsuite12345");
         if(!isOnline()) {
             Toast toast = Toast.makeText(SelectActivity.this, "Internet not available. Check network connected", Toast.LENGTH_LONG);
             toast .show();

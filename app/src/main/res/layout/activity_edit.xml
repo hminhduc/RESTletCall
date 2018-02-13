@@ -35,8 +35,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="売上表示画面"
                     android:gravity="center"
+                    android:text="売上入力・編集"
+                    android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
