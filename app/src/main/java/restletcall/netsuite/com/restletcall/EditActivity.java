@@ -2,9 +2,12 @@ package restletcall.netsuite.com.restletcall;
 
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,13 +33,12 @@ public class EditActivity extends AppCompatActivity {
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
+        configureToolbar();
 
         Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         String customerRespone = extras.getString("customerRespone");
         Integer position = extras.getInt("selectitem");
-        Log.d("customerRespone", customerRespone);
-        Log.d("selectitem", position+"");
         if(!customerRespone.isEmpty()){
             try {
                 JSONArray jsonArray = new JSONArray(customerRespone);
@@ -76,5 +78,25 @@ public class EditActivity extends AppCompatActivity {
                 EditActivity.this.startActivity(intent);
             }
         });
+    }
+
+    private void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelectActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 }
