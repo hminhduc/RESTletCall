@@ -47,7 +47,7 @@ import okhttp3.Response;
 
 public class SelectActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
+    //private DrawerLayout drawerLayout;
     private Spinner spCustomer;
     private ArrayAdapter  adapter;
     private String customerRespone = "";
@@ -107,11 +107,11 @@ public class SelectActivity extends AppCompatActivity {
                 pic.show();
             }
         });
-        configureNavigationDrawer();
-        configureToolbar();
+        /*configureNavigationDrawer();
+        configureToolbar();*/
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -168,7 +168,7 @@ public class SelectActivity extends AppCompatActivity {
         }
 
         return true;
-    }
+    }*/
 
     void getCustomer() throws IOException {
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
