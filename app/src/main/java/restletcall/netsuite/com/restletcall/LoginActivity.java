@@ -86,16 +86,16 @@ public class LoginActivity extends AppCompatActivity  {
                 String email = sharedPref.getString("email","hminhduc@icloud.com");
                 String sign = sharedPref.getString("sign","Netsuite12345");
                 if(!isOnline()) {
-                    Toast toast = Toast.makeText(LoginActivity.this, "Internet not available. Check network connected", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません", Toast.LENGTH_LONG);
                     toast .show();
                 }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
                     Toast toast = Toast.makeText(LoginActivity.this, "Please input setting", Toast.LENGTH_LONG);
                     toast.show();
                 }else if(entityid.isEmpty()){
-                    Toast toast = Toast.makeText(LoginActivity.this, "Entityid is empty", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(LoginActivity.this, "従業員IDを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
                 }else if(password.isEmpty()){
-                    Toast toast = Toast.makeText(LoginActivity.this, "Password is empty", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(LoginActivity.this, "パスワードを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
                 }else{
                     url = url+"?script=89&deploy=1&user_id="+entityid+"&mobile_pass="+password;
@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity  {
                                         }else if (json instanceof JSONArray){
                                             JSONArray responseArray = new JSONArray(myResponse);
                                             if(responseArray.length() == 0){
-                                                Toast toast = Toast.makeText(LoginActivity.this, "Entityid or Password invalid", Toast.LENGTH_LONG);
+                                                Toast toast = Toast.makeText(LoginActivity.this, "従業員IDまたはパスワードが正しくありません。", Toast.LENGTH_LONG);
                                                 toast.show();
                                             }else{
                                                 Intent intent = new Intent(LoginActivity.this,SelectActivity.class);
