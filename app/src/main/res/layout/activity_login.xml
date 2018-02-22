@@ -55,6 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
@@ -79,6 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
