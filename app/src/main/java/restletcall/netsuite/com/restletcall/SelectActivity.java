@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +22,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+//import com.reginald.editspinner.EditSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +46,9 @@ import okhttp3.Response;
 public class SelectActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private Spinner spCustomer;
+    private InstantAutoComplete iacCustomer;
+    private int selectItem;
+    //private EditSpinner esCustomer;
     private ArrayAdapter  adapter;
     private String customerRespone = "";
     List<Customer> customerList = new ArrayList<Customer>();
@@ -63,7 +62,8 @@ public class SelectActivity extends AppCompatActivity {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
-        spCustomer = (Spinner) findViewById(R.id.spCustomer);
+        //esCustomer = (EditSpinner) findViewById(R.id.esCustomer);
+        iacCustomer = (InstantAutoComplete) findViewById(R.id.iacCustomer);
         Calendar newDate = Calendar.getInstance();
         etDate.setText(sdf.format(newDate.getTime()));
         try {
@@ -77,7 +77,7 @@ public class SelectActivity extends AppCompatActivity {
                 Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
                 intent.putExtra("date", etDate.getText().toString());
                 intent.putExtra("customerRespone", customerRespone);
-                intent.putExtra("selectitem", spCustomer.getSelectedItemPosition());
+                intent.putExtra("selectitem", selectItem);
                 SelectActivity.this.startActivity(intent);
             }
         });
@@ -127,6 +127,7 @@ public class SelectActivity extends AppCompatActivity {
                 Intent homeIntent = new Intent(this, SelectActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
+                return true;
             case R.id.action_logout:
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -250,7 +251,7 @@ public class SelectActivity extends AppCompatActivity {
                                 adapter = new CustomerAdapter(SelectActivity.this,
                                         android.R.layout.simple_spinner_item,
                                         customerList);
-                                spCustomer.setAdapter(adapter);
+                                /*spCustomer.setAdapter(adapter);
                                 spCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -259,6 +260,33 @@ public class SelectActivity extends AppCompatActivity {
                                     @Override
                                     public void onNothingSelected(AdapterView<?> adapterView) {
 
+                                    }
+                                });*/
+                                /*esCustomer.setAdapter(adapter);
+                                esCustomer.setDropDownDrawableSpacing(50);
+                                esCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Customer customer = customerList.get(position);
+                                        selectItem = position;
+                                    }
+                                });*/
+
+                                iacCustomer.setAdapter(adapter);
+
+                                // Clear autocomplete
+                                iacCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Customer customer = customerList.get(position);
+                                        selectItem = position;
+                                    }
+                                });
+
+                                iacCustomer.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        iacCustomer.setText("");
                                     }
                                 });
                             }

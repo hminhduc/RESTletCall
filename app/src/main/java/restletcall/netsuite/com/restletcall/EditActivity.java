@@ -97,6 +97,7 @@ public class EditActivity extends AppCompatActivity {
                 Intent homeIntent = new Intent(this, SelectActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
+                return true;
             case R.id.action_logout:
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
