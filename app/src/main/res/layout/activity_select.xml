@@ -53,6 +53,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,11 +72,25 @@
                         android:layout_weight="1"
                         android:text="@string/customer" />
 
-                    <Spinner
-                        android:id="@+id/spCustomer"
+                    <restletcall.netsuite.com.restletcall.InstantAutoComplete
+                        android:id="@+id/iacCustomer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:completionThreshold="0"
+                        android:drawableRight="@drawable/ic_arrow_drop_down_black_18dp"
+                        android:inputType="text"
+                        android:padding="10dp" />
+
+                    <!--<com.reginald.editspinner.EditSpinner
+                        android:id="@+id/esCustomer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:dropDownDrawable="@drawable/ic_arrow_drop_down_black_18dp"
+                        app:dropDownDrawableSpacing="15dp"
+                        app:dropDownDrawableWidth="25dp"
+                        app:dropDownDrawableHeight="25dp"
+                        android:layout_weight="1" />-->
 
                 </LinearLayout>
 
