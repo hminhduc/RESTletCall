@@ -210,7 +210,7 @@ public class SelectActivity extends AppCompatActivity {
         String email = sharedPref.getString("email","hminhduc@icloud.com");
         String sign = sharedPref.getString("sign","Netsuite12345");
         if(!isOnline()) {
-            Toast toast = Toast.makeText(SelectActivity.this, "Internet not available. Check network connected", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(SelectActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
             toast .show();
         }else {
             url = url+"?script=90&deploy=1";
