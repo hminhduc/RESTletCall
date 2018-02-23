@@ -226,7 +226,7 @@ public class SelectActivity extends AppCompatActivity {
                     .get()
                     .build();
 
-            pd = ProgressDialog.show(SelectActivity.this, "Loading.Please wait...", "Wait....", true);
+            pd = ProgressDialog.show(SelectActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {call.cancel();}

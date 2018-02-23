@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity  {
                             .addHeader("content-type","application/json")
                             .get()
                             .build();
-                    pd = ProgressDialog.show(LoginActivity.this, "Loading.Please wait...", "Wait....", true);
+                    pd = ProgressDialog.show(LoginActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -181,5 +181,10 @@ public class LoginActivity extends AppCompatActivity  {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

@@ -21,7 +21,7 @@
             android:name=".NewRecordActivity"
             android:label="Create New Record" />
         <activity android:name=".PrintPdfActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

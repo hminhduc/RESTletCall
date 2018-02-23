@@ -36,11 +36,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class PrintPdfActivity extends AppCompatActivity {
 
+    private Calendar newDate = Calendar.getInstance();
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
     private String FILE = Environment.getExternalStorageDirectory().toString()
-            +"/PDF/"+"Name.pdf";
+            +"/NID/PDF/"+"Nid"+sdf.format(newDate.getTime())+".pdf";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,7 @@ public class PrintPdfActivity extends AppCompatActivity {
 
             String root = Environment.getExternalStorageDirectory().toString();
             Log.d("root", root);
-            File myDir = new File(root + "/PDF");
+            File myDir = new File(root + "NID/PDF");
             myDir.mkdirs();
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
