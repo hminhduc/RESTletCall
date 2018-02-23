@@ -50,6 +50,7 @@ public class SelectActivity extends AppCompatActivity {
     private int selectItem;
     //private EditSpinner esCustomer;
     private ArrayAdapter  adapter;
+    Customer customer;
     private String customerRespone = "";
     List<Customer> customerList = new ArrayList<Customer>();
     ProgressDialog pd;
@@ -76,8 +77,9 @@ public class SelectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
                 intent.putExtra("date", etDate.getText().toString());
-                intent.putExtra("customerRespone", customerRespone);
-                intent.putExtra("selectitem", selectItem);
+                /*intent.putExtra("customerRespone", customerRespone);
+                intent.putExtra("selectitem", selectItem);*/
+                intent.putExtra("customer", customer.toString());
                 SelectActivity.this.startActivity(intent);
             }
         });
@@ -278,8 +280,8 @@ public class SelectActivity extends AppCompatActivity {
                                 iacCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Customer customer = customerList.get(position);
-                                        selectItem = position;
+                                        customer = customerList.get(position);
+                                        //selectItem = position;
                                     }
                                 });
 

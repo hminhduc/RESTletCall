@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,14 +33,16 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        final EditText etDate = (EditText) findViewById(R.id.etDate);
-        final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
+        //final EditText etDate = (EditText) findViewById(R.id.etDate);
+        //final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
+        final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
+        final TextView tvDate = (TextView) findViewById(R.id.tvDate);
         configureToolbar();
 
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
-        String customerRespone = extras.getString("customerRespone");
+        /*String customerRespone = extras.getString("customerRespone");
         Integer position = extras.getInt("selectitem");
         if(!customerRespone.isEmpty()){
             try {
@@ -69,8 +72,9 @@ public class EditActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        etDate.setText(extras.getString("date"));
+        }*/
+        tvCustomer.setText(extras.getString("customer"));
+        tvDate.setText(extras.getString("date"));
 
         bCancle.setOnClickListener(new View.OnClickListener() {
             @Override
