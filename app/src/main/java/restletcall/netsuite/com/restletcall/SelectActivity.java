@@ -46,7 +46,7 @@ import okhttp3.Response;
 public class SelectActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private InstantAutoComplete iacCustomer;
+    //private InstantAutoComplete iacCustomer;
     private int selectItem;
     //private EditSpinner esCustomer;
     private ArrayAdapter  adapter;
@@ -64,23 +64,30 @@ public class SelectActivity extends AppCompatActivity {
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
         //esCustomer = (EditSpinner) findViewById(R.id.esCustomer);
-        iacCustomer = (InstantAutoComplete) findViewById(R.id.iacCustomer);
+        //iacCustomer = (InstantAutoComplete) findViewById(R.id.iacCustomer);
+        final EditText etCustomer = (EditText) findViewById(R.id.etCustomer);
         Calendar newDate = Calendar.getInstance();
         etDate.setText(sdf.format(newDate.getTime()));
-        try {
+        /*try {
             getCustomer();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         bSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
-                intent.putExtra("date", etDate.getText().toString());
-                /*intent.putExtra("customerRespone", customerRespone);
-                intent.putExtra("selectitem", selectItem);*/
-                intent.putExtra("customer", customer.toString());
-                SelectActivity.this.startActivity(intent);
+                String customerString = etCustomer.getText().toString();
+                if(customerString.isEmpty()) {
+                    Toast toast = Toast.makeText(SelectActivity.this, "顧客を入力してください。", Toast.LENGTH_LONG);
+                    toast.show();
+                }else{
+                    Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
+                    intent.putExtra("date", etDate.getText().toString());
+                    /*intent.putExtra("customerRespone", customerRespone);
+                    intent.putExtra("selectitem", selectItem);*/
+                    intent.putExtra("customer", customerString);
+                    SelectActivity.this.startActivity(intent);
+                }
             }
         });
         etDate.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +212,7 @@ public class SelectActivity extends AppCompatActivity {
         return true;
     }*/
 
-    void getCustomer() throws IOException {
+    /*void getCustomer() throws IOException {
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
         String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
         String account = sharedPref.getString("account","4882653_SB1");
@@ -253,7 +260,7 @@ public class SelectActivity extends AppCompatActivity {
                                 adapter = new CustomerAdapter(SelectActivity.this,
                                         android.R.layout.simple_spinner_item,
                                         customerList);
-                                /*spCustomer.setAdapter(adapter);
+                                *//*spCustomer.setAdapter(adapter);
                                 spCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -263,8 +270,8 @@ public class SelectActivity extends AppCompatActivity {
                                     public void onNothingSelected(AdapterView<?> adapterView) {
 
                                     }
-                                });*/
-                                /*esCustomer.setAdapter(adapter);
+                                });*//*
+                                *//*esCustomer.setAdapter(adapter);
                                 esCustomer.setDropDownDrawableSpacing(50);
                                 esCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
@@ -272,7 +279,7 @@ public class SelectActivity extends AppCompatActivity {
                                         Customer customer = customerList.get(position);
                                         selectItem = position;
                                     }
-                                });*/
+                                });*//*
 
                                 iacCustomer.setAdapter(adapter);
 
@@ -306,5 +313,5 @@ public class SelectActivity extends AppCompatActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
+    }*/
 }
