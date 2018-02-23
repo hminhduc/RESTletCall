@@ -50,6 +50,7 @@ public class SelectActivity extends AppCompatActivity {
     private int selectItem;
     //private EditSpinner esCustomer;
     private ArrayAdapter  adapter;
+    Customer customer;
     private String customerRespone = "";
     List<Customer> customerList = new ArrayList<Customer>();
     ProgressDialog pd;
@@ -76,8 +77,9 @@ public class SelectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
                 intent.putExtra("date", etDate.getText().toString());
-                intent.putExtra("customerRespone", customerRespone);
-                intent.putExtra("selectitem", selectItem);
+                /*intent.putExtra("customerRespone", customerRespone);
+                intent.putExtra("selectitem", selectItem);*/
+                intent.putExtra("customer", customer.toString());
                 SelectActivity.this.startActivity(intent);
             }
         });
@@ -210,7 +212,7 @@ public class SelectActivity extends AppCompatActivity {
         String email = sharedPref.getString("email","hminhduc@icloud.com");
         String sign = sharedPref.getString("sign","Netsuite12345");
         if(!isOnline()) {
-            Toast toast = Toast.makeText(SelectActivity.this, "Internet not available. Check network connected", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(SelectActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
             toast .show();
         }else {
             url = url+"?script=90&deploy=1";
@@ -224,7 +226,7 @@ public class SelectActivity extends AppCompatActivity {
                     .get()
                     .build();
 
-            pd = ProgressDialog.show(SelectActivity.this, "Loading.Please wait...", "Wait....", true);
+            pd = ProgressDialog.show(SelectActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {call.cancel();}
@@ -278,8 +280,8 @@ public class SelectActivity extends AppCompatActivity {
                                 iacCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Customer customer = customerList.get(position);
-                                        selectItem = position;
+                                        customer = customerList.get(position);
+                                        //selectItem = position;
                                     }
                                 });
 

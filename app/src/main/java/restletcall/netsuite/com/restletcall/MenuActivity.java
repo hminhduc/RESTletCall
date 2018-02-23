@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,13 +38,13 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bEdit = (Button) findViewById(R.id.bEdit);
         final Button bPrint = (Button) findViewById(R.id.bPrint);
-        Intent intent = getIntent();
+        final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
+        final TextView tvDate = (TextView) findViewById(R.id.tvDate);
         Bundle extras = getIntent().getExtras();
-        String customerRespone = extras.getString("customerRespone");
+        /*String customerRespone = extras.getString("customerRespone");
         Integer position = extras.getInt("selectitem");
         Log.d("customerRespone", customerRespone);
         Log.d("selectitem", position+"");
@@ -75,8 +76,9 @@ public class MenuActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-        etDate.setText(extras.getString("date"));
+        }*/
+        tvCustomer.setText(extras.getString("customer"));
+        tvDate.setText(extras.getString("date"));
         //configureNavigationDrawer();
         configureToolbar();
 

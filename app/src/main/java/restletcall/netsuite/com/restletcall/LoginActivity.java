@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity  {
                 String email = sharedPref.getString("email","hminhduc@icloud.com");
                 String sign = sharedPref.getString("sign","Netsuite12345");
                 if(!isOnline()) {
-                    Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
                     toast .show();
                 }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
                     Toast toast = Toast.makeText(LoginActivity.this, "Please input setting", Toast.LENGTH_LONG);
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity  {
                             .addHeader("content-type","application/json")
                             .get()
                             .build();
-                    pd = ProgressDialog.show(LoginActivity.this, "Loading.Please wait...", "Wait....", true);
+                    pd = ProgressDialog.show(LoginActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -181,5 +181,10 @@ public class LoginActivity extends AppCompatActivity  {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
