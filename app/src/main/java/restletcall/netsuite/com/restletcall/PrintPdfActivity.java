@@ -42,7 +42,7 @@ import java.util.Calendar;
 public class PrintPdfActivity extends AppCompatActivity {
 
     private Calendar newDate = Calendar.getInstance();
-    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     private String FILE = Environment.getExternalStorageDirectory().toString()
             +"/NID/PDF/"+"Nid"+sdf.format(newDate.getTime())+".pdf";
     @Override
