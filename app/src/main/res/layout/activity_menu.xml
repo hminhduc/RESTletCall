@@ -68,8 +68,9 @@
                         android:id="@+id/textView8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="@string/customer" />
+                        android:layout_weight="3"
+                        android:text="@string/customer"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tvCustomer"
@@ -95,8 +96,9 @@
                         android:id="@+id/textView9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="@string/collection_date" />
+                        android:layout_weight="3"
+                        android:text="@string/collection_date"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tvDate"
@@ -428,17 +430,19 @@
 
                     <Button
                         android:id="@+id/bEdit"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="編集" />
+                        android:text="編集"
+                        android:textSize="18sp" />
 
                     <Button
                         android:id="@+id/bPrint"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="印刷" />
+                        android:text="印刷"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>

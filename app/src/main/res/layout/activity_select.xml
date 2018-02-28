@@ -67,10 +67,11 @@
 
                     <TextView
                         android:id="@+id/textView8"
-                        android:layout_width="212dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/customer" />
+                        android:layout_weight="3"
+                        android:text="@string/customer"
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/etCustomer"
@@ -115,10 +116,11 @@
 
                     <TextView
                         android:id="@+id/textView9"
-                        android:layout_width="212dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/collection_date" />
+                        android:layout_weight="3"
+                        android:text="@string/collection_date"
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/etDate"
@@ -144,7 +146,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/select" />
+                        android:text="@string/select"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
             </LinearLayout>
