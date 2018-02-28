@@ -72,7 +72,7 @@ public class PrintPdfActivity extends AppCompatActivity {
 
             String root = Environment.getExternalStorageDirectory().toString();
             Log.d("root", root);
-            File myDir = new File(root + "NID/PDF");
+            File myDir = new File(root + "/NID/PDF");
             myDir.mkdirs();
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
