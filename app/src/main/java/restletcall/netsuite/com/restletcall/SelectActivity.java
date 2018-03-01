@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -77,44 +79,103 @@ public class SelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String customerString = etCustomer.getText().toString();
+                String dateString = etDate.getText().toString();
                 if(customerString.isEmpty()) {
-                    Toast toast = Toast.makeText(SelectActivity.this, "顧客を入力してください。", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(SelectActivity.this, "顧客IDを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
                 }else{
-                    Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
-                    intent.putExtra("date", etDate.getText().toString());
-                    /*intent.putExtra("customerRespone", customerRespone);
-                    intent.putExtra("selectitem", selectItem);*/
-                    intent.putExtra("customer", customerString);
-                    SelectActivity.this.startActivity(intent);
+                    SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
+                    String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String account = sharedPref.getString("account","4882653_SB1");
+                    String email = sharedPref.getString("email","hminhduc@icloud.com");
+                    String sign = sharedPref.getString("sign","Netsuite12345");
+                    url = url+"?script=99&deploy=1&customer_name="+customerString+"&collection_date="+dateString;
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url(urlBuilder.build().toString())
+                            .addHeader("authorization", "NLAuth nlauth_account="+account+", nlauth_email="+email+", nlauth_signature="+sign)
+                            .addHeader("content-type","application/json")
+                            .get()
+                            .build();
+                    pd = ProgressDialog.show(SelectActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            pd.dismiss();
+                            call.cancel();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            final String myResponse = response.body().string();
+                            Log.d("myResponse",myResponse);
+                            SelectActivity.this.runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    pd.dismiss();
+                                    try {
+                                        Object json = new JSONTokener(myResponse).nextValue();
+                                        if (json instanceof JSONObject){
+                                            JSONObject responseObject = new JSONObject(myResponse);
+                                            JSONObject errorObject = responseObject.getJSONObject("error");
+                                            Toast toast = Toast.makeText(SelectActivity.this, errorObject.getString("message"), Toast.LENGTH_LONG);
+                                            toast.show();
+                                        }else if (json instanceof JSONArray){
+                                            JSONArray responseArray = new JSONArray(myResponse);
+                                            if(responseArray.length() == 0){
+                                                Toast toast = Toast.makeText(SelectActivity.this, "入力された顧客IDに契約データが存在しません。", Toast.LENGTH_LONG);
+                                                toast.show();
+                                            }else{
+                                                String customerString = etCustomer.getText().toString();
+                                                String dateString = etDate.getText().toString();
+                                                Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
+                                                intent.putExtra("customer", customerString);
+                                                intent.putExtra("date", dateString);
+                                                SelectActivity.this.startActivity(intent);
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast toast = Toast.makeText(SelectActivity.this, "Please change url setting", Toast.LENGTH_LONG);
+                                        toast.show();
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
-        etDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar newDate = Calendar.getInstance();
-                String dateString = etDate.getText().toString();
-                if(dateString.isEmpty()){
-                    dateString = sdf.format(newDate.getTime());
-                }
-                String strArrtmp[]=dateString.split("/");
-                int intDay = Integer.parseInt(strArrtmp[2]);
-                int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
-                int intYear =Integer.parseInt(strArrtmp[0]);
-                Log.d("date", dateString);
-                DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        Calendar c = Calendar.getInstance();
-                        c.set(year, month, day, 0, 0);
-                        etDate.setText(sdf.format(c.getTime()));
-                    }
-                };
 
-                DatePickerDialog pic=new DatePickerDialog(
-                        SelectActivity.this, callback, intYear, intMonth, intDay);
-                pic.show();
+        etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Calendar newDate = Calendar.getInstance();
+                    String dateString = etDate.getText().toString();
+                    if(dateString.isEmpty()){
+                        dateString = sdf.format(newDate.getTime());
+                    }
+                    String strArrtmp[]=dateString.split("/");
+                    int intDay = Integer.parseInt(strArrtmp[2]);
+                    int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
+                    int intYear =Integer.parseInt(strArrtmp[0]);
+                    Log.d("date", dateString);
+                    DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                            Calendar c = Calendar.getInstance();
+                            c.set(year, month, day, 0, 0);
+                            etDate.setText(sdf.format(c.getTime()));
+                        }
+                    };
+
+                    DatePickerDialog pic=new DatePickerDialog(
+                            SelectActivity.this, callback, intYear, intMonth, intDay);
+                    pic.show();
+                }
             }
         });
         //configureNavigationDrawer();
