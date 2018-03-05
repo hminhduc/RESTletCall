@@ -1,25 +1,21 @@
 package restletcall.netsuite.com.restletcall;
 
 import android.content.Intent;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -29,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuActivity extends AppCompatActivity {
+public class ViewActivity extends AppCompatActivity {
 
     //private DrawerLayout drawerLayout;
     List<Customer> customerList = new ArrayList<Customer>();
@@ -37,48 +33,74 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_view);
         final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bEdit = (Button) findViewById(R.id.bEdit);
         final Button bPrint = (Button) findViewById(R.id.bPrint);
         final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
         final TextView tvDate = (TextView) findViewById(R.id.tvDate);
         Bundle extras = getIntent().getExtras();
-        /*String customerRespone = extras.getString("customerRespone");
-        Integer position = extras.getInt("selectitem");
-        Log.d("customerRespone", customerRespone);
-        Log.d("selectitem", position+"");
-        if(!customerRespone.isEmpty()){
-            try {
-                JSONArray jsonArray = new JSONArray(customerRespone);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject explrObject = jsonArray.getJSONObject(i);
-                    String id = explrObject.getString("id");
-                    JSONObject valuesObject = explrObject.getJSONObject("values");
-                    Customer customer = new Customer(id, valuesObject.getString("entityid"),valuesObject.getString("companyname"), valuesObject.getString("firstName"), valuesObject.getString("lastName"), valuesObject.getString("middleName"));
-                    customerList.add(customer);
-                }
-                adapter = new CustomerAdapter(MenuActivity.this,
-                        android.R.layout.simple_spinner_item,
-                        customerList);
-                spCustomer.setAdapter(adapter);
-                spCustomer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Customer customer = (Customer)spCustomer.getSelectedItem();
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-                spCustomer.setSelection(position);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }*/
         tvCustomer.setText(extras.getString("customer"));
         tvDate.setText(extras.getString("date"));
+        String myResponse = extras.getString("myResponse");
+        Log.d("myResponse",extras.getString("myResponse"));
+        try{
+            JSONArray responseArray = new JSONArray(myResponse);
+            for(int i = 0; i < responseArray.length(); i++){
+                JSONObject responseObject = responseArray.getJSONObject(i);
+                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
+                JSONObject itemvalue = rentalItems.getJSONObject("values");
+                TableLayout tl = (TableLayout)findViewById(R.id.tlList);
+                TableRow row = (TableRow) LayoutInflater.from(ViewActivity.this).inflate(R.layout.view_row, null);
+                TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+                TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
+                TextView tvName = (TextView) row.findViewById(R.id.tvName);
+                TextView tvType = (TextView) row.findViewById(R.id.tvType);
+                TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+                TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                TextView tvCounter = (TextView) row.findViewById(R.id.tvCounter);
+                TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
+                TextView tvAmount = (TextView) row.findViewById(R.id.tvAmount);
+                TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
+                tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
+                JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
+                JSONObject item = items.getJSONObject(0);
+                tvItemName.setText(item.getString("text"));
+                tvName.setText(itemvalue.getString("name"));
+                tvType.setText(itemvalue.getString("custrecord_nid_rental_model"));
+                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
+                JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
+                if(rentalSales.length() != 0 ){
+                    JSONObject rentalSalesJSONObject = rentalSales.getJSONObject(0);
+                    JSONObject value = rentalSalesJSONObject.getJSONObject("values");
+                    tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                    tvCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                    tvDifference.setText("");
+                    tvAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
+                    tvMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
+                }
+                tl.addView(row);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        /*TableLayout tl = (TableLayout)findViewById(R.id.tlList);
+        TableRow row = (TableRow) LayoutInflater.from(ViewActivity.this).inflate(R.layout.view_row, null);
+        TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+        TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
+        TextView tvName = (TextView) row.findViewById(R.id.tvName);
+        TextView tvType = (TextView) row.findViewById(R.id.tvType);
+        TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+        TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+        TextView tvCounter = (TextView) row.findViewById(R.id.tvCounter);
+        TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
+        TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
+//        TableRow row = new TableRow(this);
+//        TextView tv = new TextView(this);
+//        tv.setText("This is text");
+
+        tl.addView(row);*/
+//        row.addView(tv);
         //configureNavigationDrawer();
         configureToolbar();
 
@@ -86,9 +108,9 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.setClass(MenuActivity.this, EditActivity.class);
-                //Intent intent = new Intent(MenuActivity.this, EditActivity.class);
-                MenuActivity.this.startActivity(intent);
+                intent.setClass(ViewActivity.this, EditActivity.class);
+                //Intent intent = new Intent(ViewActivity.this, EditActivity.class);
+                ViewActivity.this.startActivity(intent);
             }
         });
 
@@ -96,9 +118,9 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.setClass(MenuActivity.this, PrintPdfActivity.class);
-                //Intent intent = new Intent(MenuActivity.this, EditActivity.class);
-                MenuActivity.this.startActivity(intent);
+                intent.setClass(ViewActivity.this, PrintPdfActivity.class);
+                //Intent intent = new Intent(ViewActivity.this, EditActivity.class);
+                ViewActivity.this.startActivity(intent);
             }
         });
     }

@@ -1,21 +1,21 @@
 package restletcall.netsuite.com.restletcall;
 
 import android.content.Intent;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -42,6 +42,48 @@ public class EditActivity extends AppCompatActivity {
 
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
+        String myResponse = extras.getString("myResponse");
+        Log.d("myResponse",extras.getString("myResponse"));
+        try {
+            JSONArray responseArray = new JSONArray(myResponse);
+            for (int i = 0; i < responseArray.length(); i++) {
+                JSONObject responseObject = responseArray.getJSONObject(i);
+                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
+                JSONObject itemvalue = rentalItems.getJSONObject("values");
+                TableLayout tl = (TableLayout) findViewById(R.id.tlList);
+                TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
+                TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+                TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
+                TextView tvName = (TextView) row.findViewById(R.id.tvName);
+                TextView tvType = (TextView) row.findViewById(R.id.tvType);
+                TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+                TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
+                tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
+                JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
+                JSONObject item = items.getJSONObject(0);
+                tvItemName.setText(item.getString("text"));
+                tvName.setText(itemvalue.getString("name"));
+                tvType.setText(itemvalue.getString("custrecord_nid_rental_model"));
+                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
+                JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
+                if (rentalSales.length() != 0) {
+                    JSONObject rentalSalesJSONObject = rentalSales.getJSONObject(0);
+                    JSONObject value = rentalSalesJSONObject.getJSONObject("values");
+                    tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                    etCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                    etDifference.setText("");
+                    etAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
+                    etMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
+                }
+                tl.addView(row);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
         /*String customerRespone = extras.getString("customerRespone");
         Integer position = extras.getInt("selectitem");
         if(!customerRespone.isEmpty()){
@@ -80,7 +122,7 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.setClass(EditActivity.this, MenuActivity.class);
+                intent.setClass(EditActivity.this, ViewActivity.class);
                 EditActivity.this.startActivity(intent);
             }
         });

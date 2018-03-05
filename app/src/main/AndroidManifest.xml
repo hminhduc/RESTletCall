@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingActivity" />
-        <activity android:name=".MenuActivity" />
+        <activity android:name=".ViewActivity" />
         <activity android:name=".SelectActivity" />
         <activity android:name=".EditActivity"></activity>
     </application>

@@ -2,11 +2,8 @@ package restletcall.netsuite.com.restletcall;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -130,9 +125,10 @@ public class SelectActivity extends AppCompatActivity {
                                             }else{
                                                 String customerString = etCustomer.getText().toString();
                                                 String dateString = etDate.getText().toString();
-                                                Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
+                                                Intent intent = new Intent(SelectActivity.this, ViewActivity.class);
                                                 intent.putExtra("customer", customerString);
                                                 intent.putExtra("date", dateString);
+                                                intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
                                             }
                                         }
