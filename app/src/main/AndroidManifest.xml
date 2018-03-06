@@ -16,10 +16,6 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".NewRecordActivity"
-            android:label="Create New Record" />
         <activity android:name=".PrintPdfActivity" />
         <activity android:name=".LoginActivity" >
             <intent-filter>

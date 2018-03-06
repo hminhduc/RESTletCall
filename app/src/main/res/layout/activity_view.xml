@@ -32,11 +32,11 @@
 
                 <TextView
                     android:id="@+id/textView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="売上表示画面"
+                    android:text="@string/view_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
@@ -134,7 +134,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_margin="1dp"
                                     android:background="@android:color/holo_blue_light"
-                                    android:text="No."
+                                    android:text="@string/no"
                                     android:textAlignment="center"
                                     android:textColor="?attr/colorBackgroundFloating"
                                     android:textSize="18sp"

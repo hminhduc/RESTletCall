@@ -34,7 +34,6 @@ public class ViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
-        final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bEdit = (Button) findViewById(R.id.bEdit);
         final Button bPrint = (Button) findViewById(R.id.bPrint);
         final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
