@@ -156,7 +156,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_actions, menu);
+        inflater.inflate(R.menu.main_actions, menu);
 
         return super.onCreateOptionsMenu(menu);
     }

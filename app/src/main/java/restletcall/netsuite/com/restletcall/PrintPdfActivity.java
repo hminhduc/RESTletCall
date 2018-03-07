@@ -1,11 +1,17 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.itextpdf.text.Chunk;
@@ -56,6 +62,43 @@ public class PrintPdfActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         pdfView.fromFile(file).load();
+        configureToolbar();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_print, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeButtonEnabled(true);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelectActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                return true;
+            case R.id.action_print:
+                File file = new File(FILE);
+                try {
+                    OpenFile.openFile(PrintPdfActivity.this, file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 
 
@@ -257,20 +300,20 @@ public class PrintPdfActivity extends AppCompatActivity {
                 PdfPTable tableFooter = new PdfPTable(4);
                 tableFooter.setTotalWidth(new float[]{ 10, 50, 10, 50 });
                 PdfPCell cellTableFooter = new PdfPCell(new Phrase("立会人", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE );
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL );
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("集金人", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE );
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL );
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableFooter.addCell(cellTableFooter);
                 cell = new PdfPCell(tableFooter);
                 cell.setBorder(Rectangle.NO_BORDER);
