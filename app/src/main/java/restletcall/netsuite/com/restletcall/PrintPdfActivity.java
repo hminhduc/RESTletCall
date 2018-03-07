@@ -67,7 +67,7 @@ public class PrintPdfActivity extends AppCompatActivity {
             Font ssFont = new Font(urName, 9);
             Font sFont = new Font(urName, 10);
             Font mFont = new Font(urName, 14);
-            Document document = new Document(PageSize.A4, 36, 36, 100, 110);
+            Document document = new Document(PageSize.A4, 36, 36, 50, 110);
 
             String root = Environment.getExternalStorageDirectory().toString();
             Log.d("root", root);
@@ -75,18 +75,37 @@ public class PrintPdfActivity extends AppCompatActivity {
             myDir.mkdirs();
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            writer.setSpaceCharRatio(PdfWriter.NO_SPACE_CHAR_RATIO);
             writer.setPageEvent(new MyFooter());
 
             document.open();
+            PdfPCell cell;
+            PdfPTable titleTable = new PdfPTable(1);
+            titleTable.setTotalWidth(new float[]{ 220 });
+            titleTable.setLockedWidth(true);
+            cell = new PdfPCell(new Phrase("回収伝票", titleFont));
+            cell.setBorder(Rectangle.BOTTOM);
+            cell.setFixedHeight(30);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+
+            titleTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("", titleFont));
+            cell.setBorder(Rectangle.BOTTOM);
+            cell.setFixedHeight(2);
+            cell.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+            titleTable.addCell(cell);
+
             Paragraph prHead = new Paragraph();
-            prHead.setAlignment(Element.ALIGN_CENTER);
+            prHead.setAlignment(Element.ALIGN_JUSTIFIED_ALL);
+            prHead.setIndentationLeft(20);
+            prHead.setIndentationRight(20);
             prHead.setFont(titleFont);
-            prHead.add("回収伝票");
+            prHead.add("");
 
             PdfPTable headTable = new PdfPTable(3);
             headTable.setTotalWidth(new float[]{ 170, 110, 100});
             headTable.setLockedWidth(true);
-            PdfPCell cell;
             cell = new PdfPCell(new Phrase("", urFontName));
             cell.setBorder(Rectangle.NO_BORDER);
             headTable.addCell(cell);
@@ -189,6 +208,8 @@ public class PrintPdfActivity extends AppCompatActivity {
             }
             document.add(prHead);
             document.add(Chunk.NEWLINE);
+            document.add(titleTable);
+            document.add(Chunk.NEWLINE);
             document.add(headTable);
             document.add(Chunk.NEWLINE);
             document.add(table);
@@ -236,16 +257,16 @@ public class PrintPdfActivity extends AppCompatActivity {
                 PdfPTable tableFooter = new PdfPTable(4);
                 tableFooter.setTotalWidth(new float[]{ 10, 50, 10, 50 });
                 PdfPCell cellTableFooter = new PdfPCell(new Phrase("立会人", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE );
+                cellTableFooter.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL );
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
                 cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTableFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("集金人", ssFont));
-                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
-                cellTableFooter.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE );
+                cellTableFooter.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL );
                 tableFooter.addCell(cellTableFooter);
                 cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
                 cellTableFooter.setVerticalAlignment(Element.ALIGN_MIDDLE);
