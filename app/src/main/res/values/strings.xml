@@ -35,4 +35,9 @@
     <string name="stop">メニュー</string>
     <string name="collection_date">回収日</string>
     <string name="select">選択</string>
+    <string name="view_title">売上表示画面</string>
+    <string name="no">No.</string>
+    <string name="select_title">顧客・回収日選択</string>
+
+
 </resources>

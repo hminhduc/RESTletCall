@@ -16,10 +16,6 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".NewRecordActivity"
-            android:label="Create New Record" />
         <activity android:name=".PrintPdfActivity" />
         <activity android:name=".LoginActivity" >
             <intent-filter>
@@ -29,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingActivity" />
-        <activity android:name=".MenuActivity" />
+        <activity android:name=".ViewActivity" />
         <activity android:name=".SelectActivity" />
         <activity android:name=".EditActivity"></activity>
     </application>

@@ -1,34 +1,49 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.DrawerLayout;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class EditActivity extends AppCompatActivity {
 
-    List<Customer> customerList = new ArrayList<Customer>();
-    private ArrayAdapter adapter;
+    private ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +51,55 @@ public class EditActivity extends AppCompatActivity {
         //final EditText etDate = (EditText) findViewById(R.id.etDate);
         //final Spinner spCustomer = (Spinner) findViewById(R.id.spCustomer);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
+        final Button bSave = (Button) findViewById(R.id.bSave);
         final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
         final TextView tvDate = (TextView) findViewById(R.id.tvDate);
+        final TableLayout tl = (TableLayout) findViewById(R.id.tlList);
         configureToolbar();
 
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
+        String myResponse = extras.getString("myResponse");
+        Log.d("myResponse",extras.getString("myResponse"));
+        try {
+            JSONArray responseArray = new JSONArray(myResponse);
+            for (int i = 0; i < responseArray.length(); i++) {
+                JSONObject responseObject = responseArray.getJSONObject(i);
+                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
+                JSONObject itemvalue = rentalItems.getJSONObject("values");
+                TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
+                TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+                TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
+                TextView tvName = (TextView) row.findViewById(R.id.tvName);
+                TextView tvType = (TextView) row.findViewById(R.id.tvType);
+                TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+                TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
+                tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
+                JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
+                JSONObject item = items.getJSONObject(0);
+                tvItemName.setText(item.getString("text"));
+                tvName.setText(itemvalue.getString("name"));
+                tvType.setText(itemvalue.getString("custrecord_nid_rental_model"));
+                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
+                JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
+                if (rentalSales.length() != 0) {
+                    JSONObject rentalSalesJSONObject = rentalSales.getJSONObject(0);
+                    JSONObject value = rentalSalesJSONObject.getJSONObject("values");
+                    tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
+                    etCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                    etDifference.setText("");
+                    etAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
+                    etMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
+                }
+                tl.addView(row);
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
         /*String customerRespone = extras.getString("customerRespone");
         Integer position = extras.getInt("selectitem");
         if(!customerRespone.isEmpty()){
@@ -80,8 +138,106 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = getIntent();
-                intent.setClass(EditActivity.this, MenuActivity.class);
+                intent.setClass(EditActivity.this, ViewActivity.class);
                 EditActivity.this.startActivity(intent);
+            }
+        });
+
+        bSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle extras = getIntent().getExtras();
+                String myResponse = extras.getString("myResponse");
+                pd = ProgressDialog.show(EditActivity.this, "Loading.Please wait...", "Wait....", true);
+                try {
+                    JSONArray responseArray = new JSONArray(myResponse);
+                    for(int i = 1; i < tl.getChildCount() ; i++){
+                        View tlChild = tl.getChildAt(i);
+                        if (tlChild instanceof TableRow) {
+                            JSONObject responseObject = responseArray.getJSONObject( i -1 );
+                            TableRow row = (TableRow) tlChild;
+                            EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                            EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                            EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                            EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
+                            JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
+                            if (rentalSales.length() != 0) {
+                                JSONObject rentalSalesJSONObject = rentalSales.getJSONObject(0);
+                                JSONObject value = rentalSalesJSONObject.getJSONObject("values");
+                                value.put("custrecord_nid_rental_sales_counter", etCounter.getText().toString());
+                                //value.put("custrecord_nid_rental_sales_memo", etDifference.getText().toString());
+                                value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
+                                value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
+                            }else{
+                                JSONObject value = new JSONObject();
+                                value.put("custrecord_nid_rental_sales_counter", etCounter.getText().toString());
+                                //value.put("custrecord_nid_rental_sales_memo", etDifference.getText().toString());
+                                value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
+                                value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
+                                JSONObject rentalSalesJSONObject =  new JSONObject();
+                                rentalSalesJSONObject.put("value", value);
+                                rentalSales.put(rentalSalesJSONObject);
+                            }
+                        }
+                    }
+                    SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
+                    String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String account = sharedPref.getString("account","4882653_SB1");
+                    String email = sharedPref.getString("email","hminhduc@icloud.com");
+                    String sign = sharedPref.getString("sign","Netsuite12345");
+                    if(!isOnline()) {
+                        Toast toast = Toast.makeText(EditActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
+                        toast .show();
+                    }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
+                        Toast toast = Toast.makeText(EditActivity.this, "Please input setting", Toast.LENGTH_LONG);
+                        toast.show();
+                    }else{
+                        url = url+"?script=99&deploy=1";
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
+                        OkHttpClient client = new OkHttpClient();
+                        MediaType mediaType = MediaType.parse("application/json");
+                        JSONObject bodyJson = new JSONObject();
+                        bodyJson.put("data", responseArray);
+                        Log.d("body", bodyJson.toString());
+                        RequestBody body = RequestBody.create(mediaType, bodyJson.toString());
+                        Request request = new Request.Builder()
+                                .url(urlBuilder.build().toString())
+                                .addHeader("authorization", "NLAuth nlauth_account="+account+", nlauth_email="+email+", nlauth_signature="+sign)
+                                .addHeader("content-type","application/json")
+                                .post(body)
+                                .build();
+
+                        client.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {call.cancel();}
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                final String myResponse = response.body().string();
+                                //Log.d("myResponse",myResponse);
+                                EditActivity.this.runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        pd.dismiss();
+                                        Toast toast = Toast.makeText(EditActivity.this, "Save Complete", Toast.LENGTH_LONG);
+                                        toast.show();
+                                        Intent intent = getIntent();
+                                        intent.setClass(EditActivity.this, ViewActivity.class);
+                                        intent.putExtra("myResponse", myResponse);
+                                        Log.d("myResponse", myResponse);
+                                        EditActivity.this.startActivity(intent);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                /*Intent intent = getIntent();
+                intent.setClass(EditActivity.this, ViewActivity.class);
+                EditActivity.this.startActivity(intent);*/
             }
         });
     }
@@ -114,8 +270,15 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_actions, menu);
+        inflater.inflate(R.menu.main_actions, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

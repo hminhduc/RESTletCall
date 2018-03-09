@@ -1,11 +1,17 @@
 package restletcall.netsuite.com.restletcall;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.itextpdf.text.Chunk;
@@ -40,7 +46,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class PrintPdfActivity extends AppCompatActivity {
-
     private Calendar newDate = Calendar.getInstance();
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     private String FILE = Environment.getExternalStorageDirectory().toString()
@@ -57,18 +62,55 @@ public class PrintPdfActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         pdfView.fromFile(file).load();
+        configureToolbar();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_print, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void configureToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeButtonEnabled(true);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, SelectActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+                return true;
+            case R.id.action_print:
+                File file = new File(FILE);
+                try {
+                    OpenFile.openFile(PrintPdfActivity.this, file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
+        }
+        return (super.onOptionsItemSelected(menuItem));
     }
 
 
     public void cretePdf() throws FileNotFoundException {
         try {
-            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
             BaseFont urName = BaseFont.createFont("assets/font/Mincho.otf", BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
-            Font titleFont = new Font(urName, 20);
-            Font urFontName = new Font(urName, 12);
-            Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-            Font normal = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
-            Document document = new Document(PageSize.A4.rotate());
+            Font titleFont = new Font(urName, 16);
+            Font urFontName = new Font(urName, 11);
+            Font ssFont = new Font(urName, 9);
+            Font sFont = new Font(urName, 10);
+            Font mFont = new Font(urName, 14);
+            Document document = new Document(PageSize.A4, 36, 36, 50, 110);
 
             String root = Environment.getExternalStorageDirectory().toString();
             Log.d("root", root);
@@ -76,129 +118,140 @@ public class PrintPdfActivity extends AppCompatActivity {
             myDir.mkdirs();
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            writer.setSpaceCharRatio(PdfWriter.NO_SPACE_CHAR_RATIO);
             writer.setPageEvent(new MyFooter());
 
             document.open();
-            Paragraph prHead = new Paragraph();
-            prHead.setAlignment(Element.ALIGN_CENTER);
-            prHead.setFont(titleFont);
-            prHead.add("回収伝票");
-            PdfPTable headTable = new PdfPTable(2);
             PdfPCell cell;
+            PdfPTable titleTable = new PdfPTable(1);
+            titleTable.setTotalWidth(new float[]{ 220 });
+            titleTable.setLockedWidth(true);
+            cell = new PdfPCell(new Phrase("回収伝票", titleFont));
+            cell.setBorder(Rectangle.BOTTOM);
+            cell.setFixedHeight(30);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+
+            titleTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("", titleFont));
+            cell.setBorder(Rectangle.BOTTOM);
+            cell.setFixedHeight(2);
+            cell.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+            titleTable.addCell(cell);
+
+            Paragraph prHead = new Paragraph();
+            prHead.setAlignment(Element.ALIGN_JUSTIFIED_ALL);
+            prHead.setIndentationLeft(20);
+            prHead.setIndentationRight(20);
+            prHead.setFont(titleFont);
+            prHead.add("");
+
+            PdfPTable headTable = new PdfPTable(3);
+            headTable.setTotalWidth(new float[]{ 170, 110, 100});
+            headTable.setLockedWidth(true);
             cell = new PdfPCell(new Phrase("", urFontName));
             cell.setBorder(Rectangle.NO_BORDER);
             headTable.addCell(cell);
-            cell = new PdfPCell(new Phrase("担当者:EMP00001 古川", urFontName));
+            cell = new PdfPCell(new Phrase("", urFontName));
+            cell.setBorder(Rectangle.NO_BORDER);
+            headTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("No.", ssFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cell.setBorder(Rectangle.NO_BORDER);
             headTable.addCell(cell);
-            cell = new PdfPCell(new Phrase("虎の門病院　様", urFontName));
+            cell = new PdfPCell(new Phrase("", urFontName));
             cell.setBorder(Rectangle.NO_BORDER);
             headTable.addCell(cell);
-            cell = new PdfPCell(new Phrase("回収日 2018年2月2日", urFontName));
+            cell = new PdfPCell(new Phrase("回収日", sFont));
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cell.setBorder(Rectangle.NO_BORDER);
             headTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("", urFontName));
+            cell.setBorder(Rectangle.NO_BORDER);
+            headTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("様", mFont));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setBorder(Rectangle.NO_BORDER);
+            headTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("予定日", sFont));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setBorder(Rectangle.NO_BORDER);
+            headTable.addCell(cell);
+            cell = new PdfPCell(new Phrase("", urFontName));
+            cell.setBorder(Rectangle.NO_BORDER);
+            headTable.addCell(cell);
 
-
-            PdfPTable table = new PdfPTable(10);
-            table.setTotalWidth(new float[]{ 40, 100, 100, 40 , 60, 60, 60, 60, 60, 60 });
+            PdfPTable table = new PdfPTable(7);
+            table.setTotalWidth(new float[]{ 30, 110, 20 , 110, 110, 100, 100 });
             table.setLockedWidth(true);
             cell = new PdfPCell(new Phrase("No.", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("物件名", urFontName));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("シリアルNo.", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("種別", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("使用料金", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            cell = new PdfPCell(new Phrase("前回カウンタ", urFontName));
+            cell = new PdfPCell(new Phrase("金額（円）", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            cell = new PdfPCell(new Phrase("今回カウンタ", urFontName));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("カウンタ差分", urFontName));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("金額", urFontName));
+            cell = new PdfPCell(new Phrase("カウンター", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("メンテカウント", urFontName));
+            cell.setMinimumHeight(45);
+            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell);
-            for(int i= 0; i< 2; i++){
-                cell = new PdfPCell(new Phrase("001", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("小型洗濯機", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("AAA000111", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("コ", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("300", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("100", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("110", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("10", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("3000", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("-1", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-            }
-            for(int i= 0; i< 2; i++){
+            for(int i= 0; i< 15; i++){
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
                 cell = new PdfPCell(new Phrase(" ", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase(" ", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase(" ", urFontName));
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase(" ", urFontName));
+                cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);
             }
             document.add(prHead);
+            document.add(Chunk.NEWLINE);
+            document.add(titleTable);
             document.add(Chunk.NEWLINE);
             document.add(headTable);
             document.add(Chunk.NEWLINE);
@@ -214,13 +267,25 @@ public class PrintPdfActivity extends AppCompatActivity {
     class MyFooter extends PdfPageEventHelper {
 
         public void onEndPage(PdfWriter writer, Document document) {
-            addHeader(writer);
+            //addHeader(writer);
+            addFooter(writer);
         }
 
         private void addHeader(PdfWriter writer){
+        }
+
+        private void addFooter(PdfWriter writer){
             try {
-                // set defaults
+                BaseFont urName = BaseFont.createFont("assets/font/Mincho.otf", BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
+                Font titleFont = new Font(urName, 16);
+                Font urFontName = new Font(urName, 11);
+                Font ssFont = new Font(urName, 9);
+                Font sFont = new Font(urName, 10);
+                Font mFont = new Font(urName, 14);
                 PdfContentByte cb = writer.getDirectContent();
+
+                PdfPTable footer = new PdfPTable(2);
+                footer.setTotalWidth(new float[]{ 370, 200 });
                 Bitmap icon = BitmapFactory.decodeResource(getResources(),
                         R.drawable.logo);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -228,8 +293,49 @@ public class PrintPdfActivity extends AppCompatActivity {
                 byte[] bitmapData = stream.toByteArray();
                 Image imgSoc = Image.getInstance(bitmapData);
                 imgSoc.scaleToFit(120,120);
+                //imgSoc.setAbsolutePosition(20, 20);
+                PdfPCell cell = new PdfPCell(imgSoc);
+                cell.setBorder(Rectangle.NO_BORDER);
+                footer.addCell(cell);
+                PdfPTable tableFooter = new PdfPTable(4);
+                tableFooter.setTotalWidth(new float[]{ 10, 50, 10, 50 });
+                PdfPCell cellTableFooter = new PdfPCell(new Phrase("立会人", ssFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tableFooter.addCell(cellTableFooter);
+                cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tableFooter.addCell(cellTableFooter);
+                cellTableFooter = new PdfPCell(new Phrase("集金人", ssFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tableFooter.addCell(cellTableFooter);
+                cellTableFooter = new PdfPCell(new Phrase("㊞", ssFont));
+                cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tableFooter.addCell(cellTableFooter);
+                cell = new PdfPCell(tableFooter);
+                cell.setBorder(Rectangle.NO_BORDER);
+                cell.setRowspan(3);
+                footer.addCell(cell);
+                cell = new PdfPCell(new Phrase("東京本社　／〒164-0012 東京都中野区本町1-23-9　　☎03(3372)1301", ssFont));
+                cell.setBorder(Rectangle.NO_BORDER);
+                footer.addCell(cell);
+                cell = new PdfPCell(new Phrase("横浜営業所／〒233-0045 横浜市磯子区洋光台6-14-1　☎045(831)1301", ssFont));
+                cell.setBorder(Rectangle.NO_BORDER);
+                footer.addCell(cell);
+                // get icon
+                /*Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.logo);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                icon.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] bitmapData = stream.toByteArray();
+                Image imgSoc = Image.getInstance(bitmapData);
+                imgSoc.scaleToFit(120,120);
                 imgSoc.setAbsolutePosition(20, 20);
-                cb.addImage(imgSoc);
+                cb.addImage(imgSoc);*/
+                footer.writeSelectedRows(0, -1, 20, 100, writer.getDirectContent());
             } catch(DocumentException de) {
                 throw new ExceptionConverter(de);
             } catch (MalformedURLException e) {
@@ -237,10 +343,6 @@ public class PrintPdfActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new ExceptionConverter(e);
             }
-        }
-
-        private void addFooter(PdfWriter writer){
-            PdfPTable footer = new PdfPTable(3);
         }
     }
 

@@ -2,11 +2,8 @@ package restletcall.netsuite.com.restletcall;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,7 +43,6 @@ import okhttp3.Response;
 public class SelectActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    //private InstantAutoComplete iacCustomer;
     private int selectItem;
     //private EditSpinner esCustomer;
     private ArrayAdapter  adapter;
@@ -65,11 +59,10 @@ public class SelectActivity extends AppCompatActivity {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
-        //esCustomer = (EditSpinner) findViewById(R.id.esCustomer);
-        //iacCustomer = (InstantAutoComplete) findViewById(R.id.iacCustomer);
         final EditText etCustomer = (EditText) findViewById(R.id.etCustomer);
         Calendar newDate = Calendar.getInstance();
         etDate.setText(sdf.format(newDate.getTime()));
+        etDate.setKeyListener(null);
         /*try {
             getCustomer();
         } catch (IOException e) {
@@ -103,6 +96,7 @@ public class SelectActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             pd.dismiss();
+                            Log.d("e", e.toString());
                             call.cancel();
                         }
 
@@ -130,9 +124,10 @@ public class SelectActivity extends AppCompatActivity {
                                             }else{
                                                 String customerString = etCustomer.getText().toString();
                                                 String dateString = etDate.getText().toString();
-                                                Intent intent = new Intent(SelectActivity.this, MenuActivity.class);
+                                                Intent intent = new Intent(SelectActivity.this, ViewActivity.class);
                                                 intent.putExtra("customer", customerString);
                                                 intent.putExtra("date", dateString);
+                                                intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
                                             }
                                         }
@@ -178,6 +173,34 @@ public class SelectActivity extends AppCompatActivity {
                 }
             }
         });
+
+        etDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar newDate = Calendar.getInstance();
+                String dateString = etDate.getText().toString();
+                if(dateString.isEmpty()){
+                    dateString = sdf.format(newDate.getTime());
+                }
+                String strArrtmp[]=dateString.split("/");
+                int intDay = Integer.parseInt(strArrtmp[2]);
+                int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
+                int intYear =Integer.parseInt(strArrtmp[0]);
+                Log.d("date", dateString);
+                DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        Calendar c = Calendar.getInstance();
+                        c.set(year, month, day, 0, 0);
+                        etDate.setText(sdf.format(c.getTime()));
+                    }
+                };
+
+                DatePickerDialog pic=new DatePickerDialog(
+                        SelectActivity.this, callback, intYear, intMonth, intDay);
+                pic.show();
+            }
+        });
         //configureNavigationDrawer();
         configureToolbar();
     }
@@ -210,7 +233,7 @@ public class SelectActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_actions, menu);
+        inflater.inflate(R.menu.main_actions, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -375,4 +398,8 @@ public class SelectActivity extends AppCompatActivity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }*/
+    @Override
+    public void onBackPressed() {
+
+    }
 }

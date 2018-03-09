@@ -27,7 +27,7 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:text="@string/setting"
@@ -141,7 +141,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/url"
-            android:inputType="textPersonName" />
+            android:inputType="text" />
     </LinearLayout>
 
     <LinearLayout
