@@ -10,6 +10,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,11 +75,11 @@ public class EditActivity extends AppCompatActivity {
                 TextView tvName = (TextView) row.findViewById(R.id.tvName);
                 TextView tvType = (TextView) row.findViewById(R.id.tvType);
                 TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
-                TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
-                EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
-                EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
-                EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
-                EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
+                final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                final EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                final EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                final EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
                 tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
                 JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
                 if(items.length() != 0){
@@ -93,12 +95,45 @@ public class EditActivity extends AppCompatActivity {
                 tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
                 JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
                 JSONObject value = rentalSales.getJSONObject("values");
-                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
                 etCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                etDifference.setText("");
+                if(!tvCounterOld.getText().toString().isEmpty()){
+                    int counted_old = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter_old"));
+                    if(!tvCounterOld.getText().toString().isEmpty()){
+                        int counter = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter"));
+                        int difference = counted_old - counter;
+                        new Integer(difference).toString();
+                        etDifference.setText(new Integer(difference).toString());
+                    }
+                }
                 etAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
                 etMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
                 tl.addView(row);
+
+                etCounter.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        if(!tvCounterOld.getText().toString().isEmpty()){
+                            int counted_old = Integer.parseInt(tvCounterOld.getText().toString());
+                            if(!tvCounterOld.getText().toString().isEmpty()){
+                                int counter = Integer.parseInt(etCounter.getText().toString());
+                                int difference = counted_old - counter;
+                                new Integer(difference).toString();
+                                etDifference.setText(new Integer(difference).toString());
+                            }
+                        }
+                    }
+                });
             }
         }catch (JSONException e){
             e.printStackTrace();
