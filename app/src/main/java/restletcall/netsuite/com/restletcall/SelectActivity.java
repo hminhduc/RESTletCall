@@ -119,8 +119,13 @@ public class SelectActivity extends AppCompatActivity {
                                         }else if (json instanceof JSONArray){
                                             JSONArray responseArray = new JSONArray(myResponse);
                                             if(responseArray.length() == 0){
-                                                Toast toast = Toast.makeText(SelectActivity.this, "入力された顧客IDに契約データが存在しません。", Toast.LENGTH_LONG);
-                                                toast.show();
+                                                String customerString = etCustomer.getText().toString();
+                                                String dateString = etDate.getText().toString();
+                                                Intent intent = new Intent(SelectActivity.this, CreateActivity.class);
+                                                intent.putExtra("customer", customerString);
+                                                intent.putExtra("date", dateString);
+                                                intent.putExtra("myResponse", myResponse);
+                                                SelectActivity.this.startActivity(intent);
                                             }else{
                                                 String customerString = etCustomer.getText().toString();
                                                 String dateString = etDate.getText().toString();

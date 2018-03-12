@@ -62,21 +62,24 @@ public class ViewActivity extends AppCompatActivity {
                 TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
                 tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
                 JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
-                JSONObject item = items.getJSONObject(0);
-                tvItemName.setText(item.getString("text"));
-                tvName.setText(itemvalue.getString("name"));
-                tvType.setText(itemvalue.getString("custrecord_nid_rental_model"));
-                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
-                JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
-                if(rentalSales.length() != 0 ){
-                    JSONObject rentalSalesJSONObject = rentalSales.getJSONObject(0);
-                    JSONObject value = rentalSalesJSONObject.getJSONObject("values");
-                    tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                    tvCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                    tvDifference.setText("");
-                    tvAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
-                    tvMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
+                if(items.length() != 0){
+                    JSONObject item = items.getJSONObject(0);
+                    tvItemName.setText(item.getString("text"));
                 }
+                tvName.setText(itemvalue.getString("name"));
+                JSONArray types = itemvalue.getJSONArray("custrecord_nid_rental_type");
+                if(types.length() != 0){
+                    JSONObject type = types.getJSONObject(0);
+                    tvType.setText(type.getString("text"));
+                }
+                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
+                JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
+                JSONObject value = rentalSales.getJSONObject("values");
+                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                tvCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                tvDifference.setText("");
+                tvAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
+                tvMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
                 tl.addView(row);
             }
         }catch (JSONException e){
