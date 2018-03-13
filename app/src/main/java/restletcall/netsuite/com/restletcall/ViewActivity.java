@@ -75,9 +75,17 @@ public class ViewActivity extends AppCompatActivity {
                 tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
                 JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
                 JSONObject value = rentalSales.getJSONObject("values");
-                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter"));
+                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
                 tvCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                tvDifference.setText("");
+                if(!tvCounterOld.getText().toString().isEmpty()){
+                    int counted_old = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter_old"));
+                    if(!tvCounterOld.getText().toString().isEmpty()){
+                        int counter = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter"));
+                        int difference = counted_old - counter;
+                        new Integer(difference).toString();
+                        tvDifference.setText(new Integer(difference).toString());
+                    }
+                }
                 tvAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
                 tvMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
                 tl.addView(row);
