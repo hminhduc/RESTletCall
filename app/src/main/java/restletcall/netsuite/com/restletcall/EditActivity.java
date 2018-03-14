@@ -186,7 +186,7 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle extras = getIntent().getExtras();
                 String myResponse = extras.getString("myResponse");
-                pd = ProgressDialog.show(EditActivity.this, "Loading.Please wait...", "Wait....", true);
+                pd = ProgressDialog.show(EditActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
                 try {
                     JSONArray responseArray = new JSONArray(myResponse);
                     for(int i = 1; i < tl.getChildCount() ; i++){
@@ -247,7 +247,7 @@ public class EditActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         pd.dismiss();
-                                        Toast toast = Toast.makeText(EditActivity.this, "Save Complete", Toast.LENGTH_LONG);
+                                        Toast toast = Toast.makeText(EditActivity.this, "保存完了", Toast.LENGTH_LONG);
                                         toast.show();
                                         Intent intent = getIntent();
                                         intent.setClass(EditActivity.this, ViewActivity.class);

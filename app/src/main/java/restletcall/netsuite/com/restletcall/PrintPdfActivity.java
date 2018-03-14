@@ -48,8 +48,9 @@ import java.util.Calendar;
 public class PrintPdfActivity extends AppCompatActivity {
     private Calendar newDate = Calendar.getInstance();
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    final SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
     private String FILE = Environment.getExternalStorageDirectory().toString()
-            +"/NID/PDF/"+"Nid"+sdf.format(newDate.getTime())+".pdf";
+            +"/NID/PDF/"+df.format(newDate.getTime())+"/"+"Nid"+sdf.format(newDate.getTime())+".pdf";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class PrintPdfActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_keyboard_backspace_white_24dp);
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeButtonEnabled(true);
     }
@@ -85,9 +86,9 @@ public class PrintPdfActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                Intent homeIntent = new Intent(this, SelectActivity.class);
-                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(homeIntent);
+                Intent intent = getIntent();
+                intent.setClass(this, ViewActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_print:
                 File file = new File(FILE);
@@ -114,7 +115,7 @@ public class PrintPdfActivity extends AppCompatActivity {
 
             String root = Environment.getExternalStorageDirectory().toString();
             Log.d("root", root);
-            File myDir = new File(root + "/NID/PDF");
+            File myDir = new File(root + "/NID/PDF/"+df.format(newDate.getTime()));
             myDir.mkdirs();
 
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(FILE));
