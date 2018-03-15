@@ -128,7 +128,6 @@ public class ViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = getIntent();
                 intent.setClass(ViewActivity.this, PrintPdfActivity.class);
-                //Intent intent = new Intent(ViewActivity.this, EditActivity.class);
                 ViewActivity.this.startActivity(intent);
             }
         });

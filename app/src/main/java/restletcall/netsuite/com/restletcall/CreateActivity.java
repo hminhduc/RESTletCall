@@ -8,9 +8,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class CreateActivity extends AppCompatActivity {
 
@@ -20,6 +30,41 @@ public class CreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create);
 
         configureToolbar();
+
+        final Button bAdd = (Button) findViewById(R.id.bAdd);
+        final Button bDelete = (Button) findViewById(R.id.bDelete);
+        final TableLayout tl = (TableLayout) findViewById(R.id.tlList);
+
+        bAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TableRow row = (TableRow) LayoutInflater.from(CreateActivity.this).inflate(R.layout.add_row, null);
+                EditText etItemNo = (EditText) row.findViewById(R.id.etItemNo);
+                EditText etItemName = (EditText) row.findViewById(R.id.etItemName);
+                EditText etName = (EditText) row.findViewById(R.id.etName);
+                EditText etType = (EditText) row.findViewById(R.id.etType);
+                EditText etUnitPrice = (EditText) row.findViewById(R.id.etUnitPrice);
+                final EditText etCounterOld = (EditText) row.findViewById(R.id.etCounterOld);
+                final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                final EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                final EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                final EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
+                tl.addView(row);
+            }
+        });
+        bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count = tl.getChildCount();
+                if(count != 1){
+                    View tlChild = tl.getChildAt(count-1);
+                    if (tlChild instanceof TableRow) {
+                        TableRow row = (TableRow) tlChild;
+                        tl.removeView(row);
+                    }
+                }
+            }
+        });
     }
 
     private void configureToolbar() {
