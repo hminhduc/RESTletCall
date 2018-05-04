@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity  {
                 String sign = sharedPref.getString("sign","Netsuite12345");
                 if(!isOnline()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
-                    toast .show();
+                    toast.show();
                 }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
                     Toast toast = Toast.makeText(LoginActivity.this, "Please input setting", Toast.LENGTH_LONG);
                     toast.show();
