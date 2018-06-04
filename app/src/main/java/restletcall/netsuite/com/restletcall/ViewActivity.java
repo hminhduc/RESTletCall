@@ -26,93 +26,72 @@ import java.util.List;
 
 public class ViewActivity extends AppCompatActivity {
 
-    //private DrawerLayout drawerLayout;
     List<Customer> customerList = new ArrayList<Customer>();
     private ArrayAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
         final Button bEdit = (Button) findViewById(R.id.bEdit);
         final Button bPrint = (Button) findViewById(R.id.bPrint);
         final TextView tvCustomer = (TextView) findViewById(R.id.tvCustomer);
         final TextView tvDate = (TextView) findViewById(R.id.tvDate);
+        //get from Intent
         Bundle extras = getIntent().getExtras();
         tvCustomer.setText(extras.getString("customer"));
         tvDate.setText(extras.getString("date"));
         String myResponse = extras.getString("myResponse");
-        Log.d("myResponse",extras.getString("myResponse"));
-        try{
+        TableLayout tl = (TableLayout) findViewById(R.id.tlList);
+
+        Log.d("ViewActivity myResponse", myResponse);
+        try {
             JSONArray responseArray = new JSONArray(myResponse);
-            for(int i = 0; i < responseArray.length(); i++){
-                JSONObject responseObject = responseArray.getJSONObject(i);
-                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
-                JSONObject itemvalue = rentalItems.getJSONObject("values");
-                TableLayout tl = (TableLayout)findViewById(R.id.tlList);
+            for (int i = 0; i < responseArray.length(); i++) {
+                JSONObject item = responseArray.getJSONObject(i);
                 TableRow row = (TableRow) LayoutInflater.from(ViewActivity.this).inflate(R.layout.view_row, null);
+                //No.
                 TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+                tvItemNo.setText(item.getString("setting_no"));
+                //物件名
                 TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
-                TextView tvName = (TextView) row.findViewById(R.id.tvName);
+                tvItemName.setText(item.getString("item_name"));
+                //種別
                 TextView tvType = (TextView) row.findViewById(R.id.tvType);
+                tvType.setText(item.getString("type"));
+                //使用料金
                 TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+                tvUnitPrice.setText(item.getString("unit_price"));
+                //前回カウンター
                 TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                tvCounterOld.setText(item.getString("sales_counter_old"));
+                //今回カウンター
                 TextView tvCounter = (TextView) row.findViewById(R.id.tvCounter);
-                TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
+                tvCounter.setText(item.getString("sales_counter"));
+                //カウンター差分
+                int counterOld = new Integer(item.getString("sales_counter_old"));
+                int counter = new Integer(item.getString("sales_counter"));
+                int diff = Math.abs(counter - counterOld);
+                TextView tvDiff = (TextView) row.findViewById(R.id.tvDifference);
+                tvDiff.setText(new Integer(diff).toString());
+                //金額
                 TextView tvAmount = (TextView) row.findViewById(R.id.tvAmount);
+                tvAmount.setText(item.getString("sales_counter_d"));
+                //メンテカウント
                 TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
-                tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
-                JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
-                if(items.length() != 0){
-                    JSONObject item = items.getJSONObject(0);
-                    tvItemName.setText(item.getString("text"));
-                }
-                tvName.setText(itemvalue.getString("name"));
-                JSONArray types = itemvalue.getJSONArray("custrecord_nid_rental_type");
-                if(types.length() != 0){
-                    JSONObject type = types.getJSONObject(0);
-                    tvType.setText(type.getString("text"));
-                }
-                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
-                JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
-                JSONObject value = rentalSales.getJSONObject("values");
-                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
-                tvCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                if(!tvCounterOld.getText().toString().isEmpty()){
-                    int counted_old = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter_old"));
-                    if(!tvCounterOld.getText().toString().isEmpty()){
-                        int counter = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter"));
-                        int difference = counted_old - counter;
-                        new Integer(difference).toString();
-                        tvDifference.setText(new Integer(difference).toString());
-                    }
-                }
-                tvAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
-                tvMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
+                tvMemo.setText(item.getString("sales_memo"));
+
                 tl.addView(row);
+
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        /*TableLayout tl = (TableLayout)findViewById(R.id.tlList);
-        TableRow row = (TableRow) LayoutInflater.from(ViewActivity.this).inflate(R.layout.view_row, null);
-        TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
-        TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
-        TextView tvName = (TextView) row.findViewById(R.id.tvName);
-        TextView tvType = (TextView) row.findViewById(R.id.tvType);
-        TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
-        TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
-        TextView tvCounter = (TextView) row.findViewById(R.id.tvCounter);
-        TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
-        TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
-//        TableRow row = new TableRow(this);
-//        TextView tv = new TextView(this);
-//        tv.setText("This is text");
 
-        tl.addView(row);*/
-//        row.addView(tv);
-        //configureNavigationDrawer();
         configureToolbar();
 
+        //編集
         bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +102,7 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
+        //印刷
         bPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,62 +146,4 @@ public class ViewActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    private void configureToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_action_menu_white);
-        actionbar.setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void configureNavigationDrawer() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.menu_layout);
-        NavigationView navView = (NavigationView) findViewById(R.id.navigation);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                Fragment f = null;
-                int itemId = menuItem.getItemId();
-
-                if (itemId == R.id.refresh) {
-                    Log.d("click","stop");
-                } else if (itemId == R.id.stop) {
-                    Log.d("click","stop");
-                }
-
-                if (f != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.frame, f);
-                    transaction.commit();
-                    drawerLayout.closeDrawers();
-                    return true;
-                }
-
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-
-        switch(itemId) {
-            // Android home
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-
-            // manage other entries if you have it ...
-        }
-
-        return true;
-    }*/
 }

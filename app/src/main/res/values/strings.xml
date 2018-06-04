@@ -7,7 +7,8 @@
     <string name="title">Title</string>
     <string name="update">Update</string>
     <string name="new_string">New</string>
-    <string name="customer">顧客ID</string>
+    <string name="customer">契約ID</string>
+    <string name="contract_name">契約名</string>
     <string name="record">Record</string>
     <string name="create">Create</string>
     <string name="print">Print</string>
@@ -37,7 +38,7 @@
     <string name="select">選択</string>
     <string name="view_title">売上表示画面</string>
     <string name="no">No.</string>
-    <string name="select_title">顧客・回収日選択</string>
+    <string name="select_title">契約・回収日選択</string>
 
 
 </resources>

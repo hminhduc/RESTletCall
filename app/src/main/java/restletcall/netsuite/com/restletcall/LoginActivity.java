@@ -42,13 +42,10 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (ContextCompat.checkSelfPermission(LoginActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -58,8 +55,7 @@ public class LoginActivity extends AppCompatActivity  {
 
                 // No explanation needed, we can request the permission.
 
-                ActivityCompat.requestPermissions(LoginActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -83,7 +79,7 @@ public class LoginActivity extends AppCompatActivity  {
                 editor.apply();
                 String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
                 String account = sharedPref.getString("account","4882653_SB1");
-                String email = sharedPref.getString("email","hminhduc@icloud.com");
+                String email = sharedPref.getString("email","rest.user@nidlaundry.jp");
                 String sign = sharedPref.getString("sign","Netsuite12345");
                 if(!isOnline()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
@@ -177,8 +173,7 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }

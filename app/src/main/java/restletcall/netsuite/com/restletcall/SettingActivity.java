@@ -26,7 +26,7 @@ public class SettingActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
         sharedPref.getString("account","");
         etAccount.setText(sharedPref.getString("account","4882653_SB1"));
-        etEmail.setText(sharedPref.getString("email","hminhduc@icloud.com"));
+        etEmail.setText(sharedPref.getString("email","rest.user@nidlaundry.jp"));
         etSign.setText(sharedPref.getString("sign","Netsuite12345"));
         etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl"));
 

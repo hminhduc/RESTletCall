@@ -59,7 +59,7 @@ public class SelectActivity extends AppCompatActivity {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
-        final EditText etCustomer = (EditText) findViewById(R.id.etCustomer);
+        final EditText etContract = (EditText) findViewById(R.id.etContract);
         Calendar newDate = Calendar.getInstance();
         etDate.setText(sdf.format(newDate.getTime()));
         etDate.setKeyListener(null);
@@ -71,16 +71,16 @@ public class SelectActivity extends AppCompatActivity {
         bSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String customerString = etCustomer.getText().toString();
+                String customerString = etContract.getText().toString();
                 String dateString = etDate.getText().toString();
                 if(customerString.isEmpty()) {
-                    Toast toast = Toast.makeText(SelectActivity.this, "顧客IDを入力してください。", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(SelectActivity.this, "契約IDを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
                 }else{
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
                     String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
                     String account = sharedPref.getString("account","4882653_SB1");
-                    String email = sharedPref.getString("email","hminhduc@icloud.com");
+                    String email = sharedPref.getString("email","rest.user@nidlaundry.jp");
                     String sign = sharedPref.getString("sign","Netsuite12345");
                     url = url+"?script=99&deploy=1&customer_name="+customerString+"&collection_date="+dateString;
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
@@ -103,7 +103,7 @@ public class SelectActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             final String myResponse = response.body().string();
-                            Log.d("myResponse",myResponse);
+                            Log.d("myResponse SelectActivity", myResponse);
                             SelectActivity.this.runOnUiThread(new Runnable() {
 
                                 @Override
@@ -111,26 +111,31 @@ public class SelectActivity extends AppCompatActivity {
                                     pd.dismiss();
                                     try {
                                         Object json = new JSONTokener(myResponse).nextValue();
-                                        if (json instanceof JSONObject){
+                                        if (json instanceof JSONObject){// input dont existing contract
                                             JSONObject responseObject = new JSONObject(myResponse);
                                             JSONObject errorObject = responseObject.getJSONObject("error");
                                             Toast toast = Toast.makeText(SelectActivity.this, errorObject.getString("message"), Toast.LENGTH_LONG);
                                             toast.show();
-                                        }else if (json instanceof JSONArray){
+                                        }else if (json instanceof JSONArray){// input existing contract
                                             JSONArray responseArray = new JSONArray(myResponse);
-                                            if(responseArray.length() == 0){
-                                                String customerString = etCustomer.getText().toString();
+                                            JSONObject itemObj = responseArray.getJSONObject(0);
+                                            String contract_altname = itemObj.getString("contract_altname");
+                                            String sales = itemObj.getString("sales");
+                                            Log.d("SelectActivity responseArray", responseArray.toString());
+                                            Log.d("SelectActivity sales", sales);
+                                            if(sales.equals("0")){//switch to Create New Rental Sales
+                                                String customerString = etContract.getText().toString();
                                                 String dateString = etDate.getText().toString();
                                                 Intent intent = new Intent(SelectActivity.this, CreateActivity.class);
-                                                intent.putExtra("customer", customerString);
+                                                intent.putExtra("customer", contract_altname);
                                                 intent.putExtra("date", dateString);
                                                 intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
-                                            }else{
-                                                String customerString = etCustomer.getText().toString();
+                                            }else{// Display list
+                                                String customerString = etContract.getText().toString();
                                                 String dateString = etDate.getText().toString();
                                                 Intent intent = new Intent(SelectActivity.this, ViewActivity.class);
-                                                intent.putExtra("customer", customerString);
+                                                intent.putExtra("customer", contract_altname);
                                                 intent.putExtra("date", dateString);
                                                 intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);

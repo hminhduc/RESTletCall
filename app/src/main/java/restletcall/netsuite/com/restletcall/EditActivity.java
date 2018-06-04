@@ -46,6 +46,7 @@ import okhttp3.Response;
 public class EditActivity extends AppCompatActivity {
 
     private ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +63,43 @@ public class EditActivity extends AppCompatActivity {
         //Intent intent = getIntent();
         Bundle extras = getIntent().getExtras();
         String myResponse = extras.getString("myResponse");
-        Log.d("myResponse",extras.getString("myResponse"));
+        Log.d("myResponse EditActivity", extras.getString("myResponse"));
         try {
             JSONArray responseArray = new JSONArray(myResponse);
             for (int i = 0; i < responseArray.length(); i++) {
-                JSONObject responseObject = responseArray.getJSONObject(i);
-                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
-                JSONObject itemvalue = rentalItems.getJSONObject("values");
+                JSONObject item = responseArray.getJSONObject(i);
+//                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
+//                JSONArray rentalItems = responseObject.getJSONArray("rental_items");
+//                for (int j = 0; j < rentalItems.length(); j++) {
+//                    JSONObject item = rentalItems.getJSONObject(j);
+                TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
+                //No
+                TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
+                tvItemNo.setText(item.getString("setting_no"));
+                //物件名
+                TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
+                tvItemName.setText(item.getString("item_name"));
+                //種別
+                TextView tvType = (TextView) row.findViewById(R.id.tvType);
+                tvType.setText(item.getString("type"));
+                //使用料金
+                final TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
+                tvUnitPrice.setText(item.getString("unit_price"));
+                //前回カウンター
+                final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                tvCounterOld.setText(item.getString("sales_counter"));
+                //金額
+                final TextView etAmount = (TextView) row.findViewById(R.id.etAmount);
+                tl.addView(row);
+//                }
+                final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                final TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
+
+                /*JSONObject itemvalue = rentalItems.getJSONObject("values");
                 TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
                 TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
                 TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
-                TextView tvName = (TextView) row.findViewById(R.id.tvName);
+//                TextView tvName = (TextView) row.findViewById(R.id.tvName);
                 TextView tvType = (TextView) row.findViewById(R.id.tvType);
                 TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
                 final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
@@ -82,13 +109,13 @@ public class EditActivity extends AppCompatActivity {
                 final EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
                 tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
                 JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
-                if(items.length() != 0){
+                if (items.length() != 0) {
                     JSONObject item = items.getJSONObject(0);
                     tvItemName.setText(item.getString("text"));
                 }
-                tvName.setText(itemvalue.getString("name"));
+//                tvName.setText(itemvalue.getString("name"));
                 JSONArray types = itemvalue.getJSONArray("custrecord_nid_rental_type");
-                if(types.length() != 0){
+                if (types.length() != 0) {
                     JSONObject type = types.getJSONObject(0);
                     tvType.setText(type.getString("text"));
                 }
@@ -97,9 +124,9 @@ public class EditActivity extends AppCompatActivity {
                 JSONObject value = rentalSales.getJSONObject("values");
                 tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
                 etCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                if(!tvCounterOld.getText().toString().isEmpty()){
+                if (!tvCounterOld.getText().toString().isEmpty()) {
                     int counted_old = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter_old"));
-                    if(!tvCounterOld.getText().toString().isEmpty()){
+                    if (!tvCounterOld.getText().toString().isEmpty()) {
                         int counter = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter"));
                         int difference = counted_old - counter;
                         new Integer(difference).toString();
@@ -109,7 +136,7 @@ public class EditActivity extends AppCompatActivity {
                 etAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
                 etMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
                 tl.addView(row);
-
+                */
                 etCounter.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -123,19 +150,33 @@ public class EditActivity extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        if(!tvCounterOld.getText().toString().isEmpty()){
+                        if (!tvCounterOld.getText().toString().isEmpty()) {
                             int counted_old = Integer.parseInt(tvCounterOld.getText().toString());
-                            if(!tvCounterOld.getText().toString().isEmpty()){
-                                int counter = Integer.parseInt(etCounter.getText().toString());
+                            //使用料金
+                            int use_amount = Integer.parseInt(tvUnitPrice.getText().toString());
+                            if (!tvCounterOld.getText().toString().isEmpty()) {
+                                int counter;
+                                //NumberFormatException: For input string: ""
+                                if(etCounter.getText().toString().isEmpty()){
+                                    counter = 0;
+                                }else{
+                                    counter = Integer.parseInt(etCounter.getText().toString());
+                                }
+                                //カウンター差分
                                 int difference = counted_old - counter;
-                                new Integer(difference).toString();
-                                etDifference.setText(new Integer(difference).toString());
+                                if (difference < 0){
+                                    difference = difference * -1;
+                                }
+                                tvDifference.setText(new Integer(difference).toString());
+                                //金額＝使用料金＊カウンタ差分
+                                int amount = difference * use_amount;
+                                etAmount.setText(new Integer(amount).toString());
                             }
                         }
                     }
                 });
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         /*String customerRespone = extras.getString("customerRespone");
@@ -180,46 +221,59 @@ public class EditActivity extends AppCompatActivity {
                 EditActivity.this.startActivity(intent);
             }
         });
-
+        //保存 click
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle extras = getIntent().getExtras();
+                String date_sales = extras.getString("date");
                 String myResponse = extras.getString("myResponse");
+                Log.d("EditActivity Save", myResponse);
                 pd = ProgressDialog.show(EditActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
                 try {
                     JSONArray responseArray = new JSONArray(myResponse);
-                    for(int i = 1; i < tl.getChildCount() ; i++){
+                    for (int i = 1; i < tl.getChildCount(); i++) {
                         View tlChild = tl.getChildAt(i);
                         if (tlChild instanceof TableRow) {
-                            JSONObject responseObject = responseArray.getJSONObject( i -1 );
+                            JSONObject responseObject = responseArray.getJSONObject(i - 1);
                             TableRow row = (TableRow) tlChild;
                             EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
-                            EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
+                            TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
                             EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
                             EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
-                            JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
-                            JSONObject value = rentalSales.getJSONObject("values");
-                            value.put("custrecord_nid_rental_sales_counter", etCounter.getText().toString());
+                            //set for rental_sales
+//                            JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
+//                            JSONObject value = rentalSales.getJSONObject("values");
+//                            value.put("custrecord_nid_rental_sales_counter", etCounter.getText().toString());
+                            //今回カウンター
+                            responseObject.put("sales_counter", etCounter.getText().toString());
+                            //カウンター差分
+                            responseObject.put("sales_diff", tvDifference.getText().toString());
+                            //金額
+                            responseObject.put("sales_counter_d", etAmount.getText().toString());
+                            //メンテカウンター
+                            responseObject.put("sales_memo", etMemo.getText().toString());
+                            responseObject.put("date_sales", date_sales);
                             //value.put("custrecord_nid_rental_sales_memo", etDifference.getText().toString());
-                            value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
-                            value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
+//                            value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
+//                            value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
 
                         }
                     }
+                    //Connect to server
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-                    String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
-                    String account = sharedPref.getString("account","4882653_SB1");
-                    String email = sharedPref.getString("email","hminhduc@icloud.com");
-                    String sign = sharedPref.getString("sign","Netsuite12345");
-                    if(!isOnline()) {
+                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String account = sharedPref.getString("account", "4882653_SB1");
+                    String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
+                    String sign = sharedPref.getString("sign", "Netsuite12345");
+                    if (!isOnline()) {
                         Toast toast = Toast.makeText(EditActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
-                        toast .show();
-                    }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
+                        toast.show();
+                    } else if ((url.equals("https://")) || account.isEmpty() || email.isEmpty() || sign.isEmpty()) {
                         Toast toast = Toast.makeText(EditActivity.this, "Please input setting", Toast.LENGTH_LONG);
                         toast.show();
-                    }else{
-                        url = url+"?script=99&deploy=1";
+                    } else {
+                        url = url + "?script=99&deploy=1";
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                         OkHttpClient client = new OkHttpClient();
                         MediaType mediaType = MediaType.parse("application/json");
@@ -229,14 +283,16 @@ public class EditActivity extends AppCompatActivity {
                         RequestBody body = RequestBody.create(mediaType, bodyJson.toString());
                         Request request = new Request.Builder()
                                 .url(urlBuilder.build().toString())
-                                .addHeader("authorization", "NLAuth nlauth_account="+account+", nlauth_email="+email+", nlauth_signature="+sign)
-                                .addHeader("content-type","application/json")
-                                .post(body)
+                                .addHeader("authorization", "NLAuth nlauth_account=" + account + ", nlauth_email=" + email + ", nlauth_signature=" + sign)
+                                .addHeader("content-type", "application/json")
+                                .put(body)
                                 .build();
 
                         client.newCall(request).enqueue(new Callback() {
                             @Override
-                            public void onFailure(Call call, IOException e) {call.cancel();}
+                            public void onFailure(Call call, IOException e) {
+                                call.cancel();
+                            }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {

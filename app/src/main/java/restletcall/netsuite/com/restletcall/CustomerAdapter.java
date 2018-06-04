@@ -53,8 +53,7 @@ public class CustomerAdapter extends ArrayAdapter<Customer> {
     // And here is when the "chooser" is popped up
     // Normally is the same view, but you can customize it if you want
     @Override
-    public View getDropDownView(int position, View convertView,
-                                ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
         TextView label = new TextView(context);
         label.setText(objects.get(position).toString());
         return label;

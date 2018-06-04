@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,14 +14,6 @@
 
     <TextView
         android:id="@+id/tvItemName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:background="@android:color/white"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
@@ -64,15 +57,12 @@
         android:textAlignment="center"
         android:textSize="14sp" />
 
-    <EditText
-        android:id="@+id/etDifference"
+    <TextView
+        android:id="@+id/tvDifference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="@android:color/white"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textSize="14sp" />
+        android:background="@android:color/white" />
 
     <EditText
         android:id="@+id/etAmount"
