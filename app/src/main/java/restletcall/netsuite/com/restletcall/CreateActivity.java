@@ -85,9 +85,12 @@ public class CreateActivity extends AppCompatActivity {
                 //カウンター差分
                 final TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
                 //前回カウンター
+                final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
+                tvCounterOld.setText(item.getString("sales_counter_old"));
                 //金額
                 final TextView etAmount = (TextView) row.findViewById(R.id.etAmount);
                 //メンテカウント
+
                 etCounter.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,6 +106,13 @@ public class CreateActivity extends AppCompatActivity {
                     public void afterTextChanged(Editable editable) {
                         //使用料金
                         int use_amount = Integer.parseInt(tvUnitPrice.getText().toString());
+                        int counter_old;
+                        if (tvCounterOld.getText().toString().isEmpty()) {
+                            counter_old = 0;
+                        } else {
+                            counter_old = Integer.parseInt(tvCounterOld.getText().toString());
+                        }
+
                         int counter;
                         //NumberFormatException: For input string: ""
                         if (etCounter.getText().toString().isEmpty()) {
@@ -111,9 +121,13 @@ public class CreateActivity extends AppCompatActivity {
                             counter = Integer.parseInt(etCounter.getText().toString());
                         }
                         //カウンター差分
-                        tvDifference.setText(etCounter.getText().toString());
+                        int difference = counter_old - counter;
+                        if (difference < 0) {
+                            difference = difference * -1;
+                        }
+                        tvDifference.setText(new Integer(difference).toString());
                         //金額＝使用料金＊カウンタ差分
-                        int amount = counter * use_amount;
+                        int amount = difference * use_amount;
                         etAmount.setText(new Integer(amount).toString());
                     }
                 });
@@ -122,6 +136,15 @@ public class CreateActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        bCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                intent.setClass(CreateActivity.this, SelectActivity.class);
+                CreateActivity.this.startActivity(intent);
+            }
+        });
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override

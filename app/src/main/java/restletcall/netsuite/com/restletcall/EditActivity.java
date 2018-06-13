@@ -68,10 +68,6 @@ public class EditActivity extends AppCompatActivity {
             JSONArray responseArray = new JSONArray(myResponse);
             for (int i = 0; i < responseArray.length(); i++) {
                 JSONObject item = responseArray.getJSONObject(i);
-//                JSONObject rentalItems = responseObject.getJSONObject("rental_items");
-//                JSONArray rentalItems = responseObject.getJSONArray("rental_items");
-//                for (int j = 0; j < rentalItems.length(); j++) {
-//                    JSONObject item = rentalItems.getJSONObject(j);
                 TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
                 //No
                 TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
@@ -87,7 +83,7 @@ public class EditActivity extends AppCompatActivity {
                 tvUnitPrice.setText(item.getString("unit_price"));
                 //前回カウンター
                 final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
-                tvCounterOld.setText(item.getString("sales_counter"));
+                tvCounterOld.setText(item.getString("sales_counter_old"));
                 //金額
                 final TextView etAmount = (TextView) row.findViewById(R.id.etAmount);
                 tl.addView(row);
@@ -95,48 +91,10 @@ public class EditActivity extends AppCompatActivity {
                 final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
                 final TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
 
-                /*JSONObject itemvalue = rentalItems.getJSONObject("values");
-                TableRow row = (TableRow) LayoutInflater.from(EditActivity.this).inflate(R.layout.edit_row, null);
-                TextView tvItemNo = (TextView) row.findViewById(R.id.tvItemNo);
-                TextView tvItemName = (TextView) row.findViewById(R.id.tvItemName);
-//                TextView tvName = (TextView) row.findViewById(R.id.tvName);
-                TextView tvType = (TextView) row.findViewById(R.id.tvType);
-                TextView tvUnitPrice = (TextView) row.findViewById(R.id.tvUnitPrice);
-                final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
-                final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
-                final EditText etDifference = (EditText) row.findViewById(R.id.etDifference);
-                final EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
-                final EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
-                tvItemNo.setText(itemvalue.getString("custrecord_nid_rental_setting_no"));
-                JSONArray items = itemvalue.getJSONArray("custrecord_nid_rental_item_name");
-                if (items.length() != 0) {
-                    JSONObject item = items.getJSONObject(0);
-                    tvItemName.setText(item.getString("text"));
-                }
-//                tvName.setText(itemvalue.getString("name"));
-                JSONArray types = itemvalue.getJSONArray("custrecord_nid_rental_type");
-                if (types.length() != 0) {
-                    JSONObject type = types.getJSONObject(0);
-                    tvType.setText(type.getString("text"));
-                }
-                tvUnitPrice.setText(itemvalue.getString("custrecord_nid_rental_unit_price"));
-                JSONObject rentalSales = responseObject.getJSONObject("rental_sales");
-                JSONObject value = rentalSales.getJSONObject("values");
-                tvCounterOld.setText(value.getString("custrecord_nid_rental_sales_counter_old"));
-                etCounter.setText(value.getString("custrecord_nid_rental_sales_counter"));
-                if (!tvCounterOld.getText().toString().isEmpty()) {
-                    int counted_old = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter_old"));
-                    if (!tvCounterOld.getText().toString().isEmpty()) {
-                        int counter = Integer.parseInt(value.getString("custrecord_nid_rental_sales_counter"));
-                        int difference = counted_old - counter;
-                        new Integer(difference).toString();
-                        etDifference.setText(new Integer(difference).toString());
-                    }
-                }
-                etAmount.setText(value.getString("custrecord_nid_rental_sales_amount_d"));
-                etMemo.setText(value.getString("custrecord_nid_rental_sales_memo"));
-                tl.addView(row);
-                */
+                //メンテカウント
+                TextView etMemo = (TextView) row.findViewById(R.id.etMemo);
+                etMemo.setText(item.getString("sales_memo"));
+
                 etCounter.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

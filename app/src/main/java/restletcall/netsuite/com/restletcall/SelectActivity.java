@@ -60,6 +60,8 @@ public class SelectActivity extends AppCompatActivity {
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
         final EditText etContract = (EditText) findViewById(R.id.etContract);
+        //default CON setting
+        etContract.setText("CON");
         Calendar newDate = Calendar.getInstance();
         etDate.setText(sdf.format(newDate.getTime()));
         etDate.setKeyListener(null);

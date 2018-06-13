@@ -226,7 +226,7 @@ public class PrintPdfActivity extends AppCompatActivity {
             prHead.add("");
 
             PdfPTable headTable = new PdfPTable(3);
-            headTable.setTotalWidth(new float[]{170, 110, 100});
+            headTable.setTotalWidth(new float[]{170, 150, 150});
             headTable.setLockedWidth(true);
             //row1
             cell = new PdfPCell(new Phrase("", urFontName));
@@ -311,56 +311,59 @@ public class PrintPdfActivity extends AppCompatActivity {
             //binding list
             int row = 0;
             for (int i = 0; i < responseArray.length(); i++) {
-                row = i;
+                row = i + 1;
                 JSONObject item = responseArray.getJSONObject(i);
-                if (i < 15) {
-                    //No
-                    cell = new PdfPCell(new Phrase(new Integer(i+1).toString(), urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //物件名
-                    cell = new PdfPCell(new Phrase(item.getString("name"), urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //種別
-                    cell = new PdfPCell(new Phrase(item.getString("type"), urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //使用料金
-                    cell = new PdfPCell(new Phrase(item.getString("unit_price"), urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //金額（円）
-                    String amount = item.getString("sales_counter_d");
-                    if (amount.isEmpty()) amount = "";
-                    cell = new PdfPCell(new Phrase(amount, urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //カウンター差分
-                    int counterOld = new Integer(item.getString("sales_counter_old"));
-                    int counter = new Integer(item.getString("sales_counter"));
-                    int diff = Math.abs(counter - counterOld);
-                    cell = new PdfPCell(new Phrase(new Integer(diff).toString(), urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                    //メンテカウント
-                    String salesMemo = item.getString("sales_memo");
-                    if (salesMemo.isEmpty()) salesMemo = "";
-                    cell = new PdfPCell(new Phrase(salesMemo, urFontName));
-                    cell.setMinimumHeight(45);
-                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(cell);
-                }
+                //No
+                cell = new PdfPCell(new Phrase(new Integer(row).toString(), urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //物件名
+                cell = new PdfPCell(new Phrase(item.getString("name"), urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //種別
+                cell = new PdfPCell(new Phrase(item.getString("type"), urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //使用料金
+                cell = new PdfPCell(new Phrase(item.getString("unit_price"), urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //金額（円）
+                String amount = item.getString("sales_counter_d");
+                if (amount.isEmpty()) amount = "";
+                cell = new PdfPCell(new Phrase(amount, urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //カウンター差分
+                int counterOld = new Integer(item.getString("sales_counter_old"));
+                int counter = new Integer(item.getString("sales_counter"));
+                int diff = Math.abs(counter - counterOld);
+                cell = new PdfPCell(new Phrase(new Integer(diff).toString(), urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
+                //メンテカウント
+                String salesMemo = item.getString("sales_memo");
+                if (salesMemo.isEmpty()) salesMemo = "";
+                cell = new PdfPCell(new Phrase(salesMemo, urFontName));
+                cell.setMinimumHeight(45);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
             }
-            //Check if row < 9 for fill one page
-            while (row < 9){
-                row ++;
+            //Check if row < 10*pageNum for fill one per page
+            int mod = row % 10;
+            int page = (row - mod) / 10;
+            if (mod > 0) page += 1;
+            if(page == 0) page = 1;
+
+            while (row < 10 * page) {
+                row++;
                 cell = new PdfPCell(new Phrase(" ", urFontName));
                 cell.setMinimumHeight(45);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);

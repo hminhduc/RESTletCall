@@ -76,8 +76,13 @@ public class ViewActivity extends AppCompatActivity {
                 TextView tvDiff = (TextView) row.findViewById(R.id.tvDifference);
                 tvDiff.setText(new Integer(diff).toString());
                 //金額
+                String amount = item.getString("sales_counter_d");
+
+                if(amount.length()>3){
+                    amount = amount.substring(0, amount.length()-3);
+                }
                 TextView tvAmount = (TextView) row.findViewById(R.id.tvAmount);
-                tvAmount.setText(item.getString("sales_counter_d"));
+                tvAmount.setText(new Integer(amount).toString());
                 //メンテカウント
                 TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
                 tvMemo.setText(item.getString("sales_memo"));
