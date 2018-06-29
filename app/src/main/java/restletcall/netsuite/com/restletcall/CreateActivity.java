@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -178,6 +179,9 @@ public class CreateActivity extends AppCompatActivity {
                             //メンテカウンター
                             responseObject.put("sales_memo", etMemo.getText().toString());
                             responseObject.put("date_sales", date_sales);
+                            //loginId
+                            SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
+                            responseObject.put("loginId", sharedPref.getString("entityid",""));
                             //value.put("custrecord_nid_rental_sales_memo", etDifference.getText().toString());
 //                            value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
 //                            value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
@@ -199,7 +203,13 @@ public class CreateActivity extends AppCompatActivity {
                     } else {
                         url = url + "?script=99&deploy=1";
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
-                        OkHttpClient client = new OkHttpClient();
+//                        OkHttpClient client = new OkHttpClient();
+                        OkHttpClient client = new OkHttpClient.Builder()
+                                .connectTimeout(30, TimeUnit.SECONDS)
+                                .readTimeout(60, TimeUnit.SECONDS)
+                                .writeTimeout(30, TimeUnit.SECONDS)
+                                .retryOnConnectionFailure(false) //<-- not necessary but useful!
+                                .build();
                         MediaType mediaType = MediaType.parse("application/json");
                         JSONObject bodyJson = new JSONObject();
                         bodyJson.put("data", responseArray);

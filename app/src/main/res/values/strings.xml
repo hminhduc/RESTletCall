@@ -39,6 +39,7 @@
     <string name="view_title">売上表示画面</string>
     <string name="no">No.</string>
     <string name="select_title">契約・回収日選択</string>
+    <string name="version_info">バージョン</string>
 
 
 </resources>

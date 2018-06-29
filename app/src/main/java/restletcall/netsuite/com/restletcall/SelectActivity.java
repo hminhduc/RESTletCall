@@ -2,6 +2,7 @@ package restletcall.netsuite.com.restletcall;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +47,7 @@ public class SelectActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private int selectItem;
     //private EditSpinner esCustomer;
-    private ArrayAdapter  adapter;
+    private ArrayAdapter adapter;
     Customer customer;
     private String customerRespone = "";
     List<Customer> customerList = new ArrayList<Customer>();
@@ -57,9 +59,11 @@ public class SelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select);
 
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        //契約ID
+        final EditText etContract = (EditText) findViewById(R.id.etContract);
+        //回収日
         final EditText etDate = (EditText) findViewById(R.id.etDate);
         final Button bSelect = (Button) findViewById(R.id.bSelect);
-        final EditText etContract = (EditText) findViewById(R.id.etContract);
         //default CON setting
         etContract.setText("CON");
         Calendar newDate = Calendar.getInstance();
@@ -75,22 +79,22 @@ public class SelectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String customerString = etContract.getText().toString();
                 String dateString = etDate.getText().toString();
-                if(customerString.isEmpty()) {
+                if (customerString.isEmpty()) {
                     Toast toast = Toast.makeText(SelectActivity.this, "契約IDを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
-                }else{
+                } else {
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-                    String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
-                    String account = sharedPref.getString("account","4882653_SB1");
-                    String email = sharedPref.getString("email","rest.user@nidlaundry.jp");
-                    String sign = sharedPref.getString("sign","Netsuite12345");
-                    url = url+"?script=99&deploy=1&customer_name="+customerString+"&collection_date="+dateString;
+                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String account = sharedPref.getString("account", "4882653_SB1");
+                    String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
+                    String sign = sharedPref.getString("sign", "Netsuite12345");
+                    url = url + "?script=99&deploy=1&customer_name=" + customerString + "&collection_date=" + dateString;
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
                             .url(urlBuilder.build().toString())
-                            .addHeader("authorization", "NLAuth nlauth_account="+account+", nlauth_email="+email+", nlauth_signature="+sign)
-                            .addHeader("content-type","application/json")
+                            .addHeader("authorization", "NLAuth nlauth_account=" + account + ", nlauth_email=" + email + ", nlauth_signature=" + sign)
+                            .addHeader("content-type", "application/json")
                             .get()
                             .build();
                     pd = ProgressDialog.show(SelectActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
@@ -113,19 +117,19 @@ public class SelectActivity extends AppCompatActivity {
                                     pd.dismiss();
                                     try {
                                         Object json = new JSONTokener(myResponse).nextValue();
-                                        if (json instanceof JSONObject){// input dont existing contract
+                                        if (json instanceof JSONObject) {// input dont existing contract
                                             JSONObject responseObject = new JSONObject(myResponse);
                                             JSONObject errorObject = responseObject.getJSONObject("error");
                                             Toast toast = Toast.makeText(SelectActivity.this, errorObject.getString("message"), Toast.LENGTH_LONG);
                                             toast.show();
-                                        }else if (json instanceof JSONArray){// input existing contract
+                                        } else if (json instanceof JSONArray) {// input existing contract
                                             JSONArray responseArray = new JSONArray(myResponse);
                                             JSONObject itemObj = responseArray.getJSONObject(0);
                                             String contract_altname = itemObj.getString("contract_altname");
                                             String sales = itemObj.getString("sales");
                                             Log.d("SelectActivity responseArray", responseArray.toString());
                                             Log.d("SelectActivity sales", sales);
-                                            if(sales.equals("0")){//switch to Create New Rental Sales
+                                            if (sales.equals("0")) {//switch to Create New Rental Sales
                                                 String customerString = etContract.getText().toString();
                                                 String dateString = etDate.getText().toString();
                                                 Intent intent = new Intent(SelectActivity.this, CreateActivity.class);
@@ -133,7 +137,7 @@ public class SelectActivity extends AppCompatActivity {
                                                 intent.putExtra("date", dateString);
                                                 intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
-                                            }else{// Display list
+                                            } else {// Display list
                                                 String customerString = etContract.getText().toString();
                                                 String dateString = etDate.getText().toString();
                                                 Intent intent = new Intent(SelectActivity.this, ViewActivity.class);
@@ -159,16 +163,16 @@ public class SelectActivity extends AppCompatActivity {
         etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if(b){
+                if (b) {
                     Calendar newDate = Calendar.getInstance();
                     String dateString = etDate.getText().toString();
-                    if(dateString.isEmpty()){
+                    if (dateString.isEmpty()) {
                         dateString = sdf.format(newDate.getTime());
                     }
-                    String strArrtmp[]=dateString.split("/");
+                    String strArrtmp[] = dateString.split("/");
                     int intDay = Integer.parseInt(strArrtmp[2]);
-                    int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
-                    int intYear =Integer.parseInt(strArrtmp[0]);
+                    int intMonth = Integer.parseInt(strArrtmp[1]) - 1;
+                    int intYear = Integer.parseInt(strArrtmp[0]);
                     Log.d("date", dateString);
                     DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -179,7 +183,7 @@ public class SelectActivity extends AppCompatActivity {
                         }
                     };
 
-                    DatePickerDialog pic=new DatePickerDialog(
+                    DatePickerDialog pic = new DatePickerDialog(
                             SelectActivity.this, callback, intYear, intMonth, intDay);
                     pic.show();
                 }
@@ -191,13 +195,13 @@ public class SelectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Calendar newDate = Calendar.getInstance();
                 String dateString = etDate.getText().toString();
-                if(dateString.isEmpty()){
+                if (dateString.isEmpty()) {
                     dateString = sdf.format(newDate.getTime());
                 }
-                String strArrtmp[]=dateString.split("/");
+                String strArrtmp[] = dateString.split("/");
                 int intDay = Integer.parseInt(strArrtmp[2]);
-                int intMonth=Integer.parseInt(strArrtmp[1]) - 1;
-                int intYear =Integer.parseInt(strArrtmp[0]);
+                int intMonth = Integer.parseInt(strArrtmp[1]) - 1;
+                int intYear = Integer.parseInt(strArrtmp[0]);
                 Log.d("date", dateString);
                 DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -208,7 +212,7 @@ public class SelectActivity extends AppCompatActivity {
                     }
                 };
 
-                DatePickerDialog pic=new DatePickerDialog(
+                DatePickerDialog pic = new DatePickerDialog(
                         SelectActivity.this, callback, intYear, intMonth, intDay);
                 pic.show();
             }
@@ -367,7 +371,7 @@ public class SelectActivity extends AppCompatActivity {
 
                                     }
                                 });*//*
-                                *//*esCustomer.setAdapter(adapter);
+     *//*esCustomer.setAdapter(adapter);
                                 esCustomer.setDropDownDrawableSpacing(50);
                                 esCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
@@ -413,5 +417,16 @@ public class SelectActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+    public class EditTextEx extends EditText {
+
+        public EditTextEx(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        @Override
+        public boolean onCheckIsTextEditor() {
+            return false;
+        }
     }
 }

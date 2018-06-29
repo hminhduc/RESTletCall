@@ -20,6 +20,7 @@ public class SettingActivity extends AppCompatActivity {
         final EditText etEmail = (EditText) findViewById(R.id.etEmail);
         final EditText etSign = (EditText) findViewById(R.id.etSign);
         final EditText etUrl = (EditText) findViewById(R.id.etUrl);
+        final EditText etVersion = (EditText) findViewById(R.id.etVersion);
         final Button bSave = (Button) findViewById(R.id.bSave);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
 
@@ -29,6 +30,7 @@ public class SettingActivity extends AppCompatActivity {
         etEmail.setText(sharedPref.getString("email","rest.user@nidlaundry.jp"));
         etSign.setText(sharedPref.getString("sign","Netsuite12345"));
         etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl"));
+        etVersion.setText(sharedPref.getString("version","0.0.1"));
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +39,7 @@ public class SettingActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String sign = etSign.getText().toString();
                 String url = etUrl.getText().toString();
+                String version = etVersion.getText().toString();
 
                 SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
@@ -44,6 +47,7 @@ public class SettingActivity extends AppCompatActivity {
                 editor.putString("email", email);
                 editor.putString("sign", sign);
                 editor.putString("url", url);
+                editor.putString("version", version);
                 editor.apply();
                 Log.d("accountVal", sharedPref.getString("account",""));
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);

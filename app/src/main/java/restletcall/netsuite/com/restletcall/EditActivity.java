@@ -85,14 +85,22 @@ public class EditActivity extends AppCompatActivity {
                 final TextView tvCounterOld = (TextView) row.findViewById(R.id.tvCounterOld);
                 tvCounterOld.setText(item.getString("sales_counter_old"));
                 //金額
-                final TextView etAmount = (TextView) row.findViewById(R.id.etAmount);
+                final EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
+                etAmount.setText(item.getString("sales_counter_d"));
+
                 tl.addView(row);
-//                }
+                //今回カウンター
                 final EditText etCounter = (EditText) row.findViewById(R.id.etCounter);
+                etCounter.setText(item.getString("sales_counter"));
+                //カウンター差分
                 final TextView tvDifference = (TextView) row.findViewById(R.id.tvDifference);
+                int counterOld = new Integer(item.getString("sales_counter_old"));
+                int counter = new Integer(item.getString("sales_counter"));
+                int diff = Math.abs(counter - counterOld);
+                tvDifference.setText(new Integer(diff).toString());
 
                 //メンテカウント
-                TextView etMemo = (TextView) row.findViewById(R.id.etMemo);
+                EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
                 etMemo.setText(item.getString("sales_memo"));
 
                 etCounter.addTextChangedListener(new TextWatcher() {

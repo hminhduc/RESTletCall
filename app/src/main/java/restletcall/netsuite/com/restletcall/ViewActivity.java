@@ -48,6 +48,17 @@ public class ViewActivity extends AppCompatActivity {
         Log.d("ViewActivity myResponse", myResponse);
         try {
             JSONArray responseArray = new JSONArray(myResponse);
+            //check for show edit button
+            for (int i = 0; i < responseArray.length(); i++) {
+                JSONObject item = responseArray.getJSONObject(i);
+                String editEnable = item.getString("editEnable");
+                if(editEnable.equals("0")){
+                    bEdit.setVisibility(View.INVISIBLE);
+                }else {
+                    bEdit.setVisibility(View.VISIBLE);
+                }
+                break;
+            }
             for (int i = 0; i < responseArray.length(); i++) {
                 JSONObject item = responseArray.getJSONObject(i);
                 TableRow row = (TableRow) LayoutInflater.from(ViewActivity.this).inflate(R.layout.view_row, null);
@@ -78,11 +89,11 @@ public class ViewActivity extends AppCompatActivity {
                 //金額
                 String amount = item.getString("sales_counter_d");
 
-                if(amount.length()>3){
+                /*if(amount.length()>3){
                     amount = amount.substring(0, amount.length()-3);
-                }
+                }*/
                 TextView tvAmount = (TextView) row.findViewById(R.id.tvAmount);
-                tvAmount.setText(new Integer(amount).toString());
+                tvAmount.setText(amount);
                 //メンテカウント
                 TextView tvMemo = (TextView) row.findViewById(R.id.tvMemo);
                 tvMemo.setText(item.getString("sales_memo"));

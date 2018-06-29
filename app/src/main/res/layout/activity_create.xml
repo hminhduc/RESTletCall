@@ -55,9 +55,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:orientation="horizontal"
@@ -83,9 +83,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:orientation="horizontal"
@@ -110,9 +109,10 @@
                 </LinearLayout>
 
                 <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="9">
 
                     <ScrollView
                         android:layout_width="match_parent"
@@ -227,9 +227,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <Button
                         android:id="@+id/bSave"
