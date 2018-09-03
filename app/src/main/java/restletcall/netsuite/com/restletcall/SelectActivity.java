@@ -87,7 +87,7 @@ public class SelectActivity extends AppCompatActivity {
                     String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
-                    String sign = sharedPref.getString("sign", "Netsuite12345");
+                    String sign = sharedPref.getString("sign", "Netsuite1234567");
                     url = url + "?script=99&deploy=1&customer_name=" + customerString + "&collection_date=" + dateString;
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                     OkHttpClient client = new OkHttpClient();
@@ -183,8 +183,7 @@ public class SelectActivity extends AppCompatActivity {
                         }
                     };
 
-                    DatePickerDialog pic = new DatePickerDialog(
-                            SelectActivity.this, callback, intYear, intMonth, intDay);
+                    DatePickerDialog pic = new DatePickerDialog(SelectActivity.this, callback, intYear, intMonth, intDay);
                     pic.show();
                 }
             }
@@ -212,8 +211,7 @@ public class SelectActivity extends AppCompatActivity {
                     }
                 };
 
-                DatePickerDialog pic = new DatePickerDialog(
-                        SelectActivity.this, callback, intYear, intMonth, intDay);
+                DatePickerDialog pic = new DatePickerDialog(SelectActivity.this, callback, intYear, intMonth, intDay);
                 pic.show();
             }
         });

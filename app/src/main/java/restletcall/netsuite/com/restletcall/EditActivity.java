@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -123,14 +124,14 @@ public class EditActivity extends AppCompatActivity {
                             if (!tvCounterOld.getText().toString().isEmpty()) {
                                 int counter;
                                 //NumberFormatException: For input string: ""
-                                if(etCounter.getText().toString().isEmpty()){
+                                if (etCounter.getText().toString().isEmpty()) {
                                     counter = 0;
-                                }else{
+                                } else {
                                     counter = Integer.parseInt(etCounter.getText().toString());
                                 }
                                 //カウンター差分
                                 int difference = counted_old - counter;
-                                if (difference < 0){
+                                if (difference < 0) {
                                     difference = difference * -1;
                                 }
                                 tvDifference.setText(new Integer(difference).toString());
@@ -231,7 +232,7 @@ public class EditActivity extends AppCompatActivity {
                     String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
-                    String sign = sharedPref.getString("sign", "Netsuite12345");
+                    String sign = sharedPref.getString("sign", "Netsuite1234567");
                     if (!isOnline()) {
                         Toast toast = Toast.makeText(EditActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
                         toast.show();
@@ -241,7 +242,13 @@ public class EditActivity extends AppCompatActivity {
                     } else {
                         url = url + "?script=99&deploy=1";
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
-                        OkHttpClient client = new OkHttpClient();
+//                        OkHttpClient client = new OkHttpClient();
+                        OkHttpClient client = new OkHttpClient.Builder()
+                                .connectTimeout(60, TimeUnit.SECONDS)
+                                .readTimeout(60, TimeUnit.SECONDS)
+                                .writeTimeout(60, TimeUnit.SECONDS)
+                                .retryOnConnectionFailure(false) //<-- not necessary but useful!
+                                .build();
                         MediaType mediaType = MediaType.parse("application/json");
                         JSONObject bodyJson = new JSONObject();
                         bodyJson.put("data", responseArray);

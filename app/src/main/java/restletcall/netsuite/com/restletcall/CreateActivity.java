@@ -41,6 +41,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class CreateActivity extends AppCompatActivity {
     private ProgressDialog pd;
 
@@ -193,7 +195,7 @@ public class CreateActivity extends AppCompatActivity {
                     String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
-                    String sign = sharedPref.getString("sign", "Netsuite12345");
+                    String sign = sharedPref.getString("sign", "Netsuite1234567");
                     if (!isOnline()) {
                         Toast toast = Toast.makeText(CreateActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
                         toast.show();
@@ -205,9 +207,9 @@ public class CreateActivity extends AppCompatActivity {
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
 //                        OkHttpClient client = new OkHttpClient();
                         OkHttpClient client = new OkHttpClient.Builder()
-                                .connectTimeout(30, TimeUnit.SECONDS)
+                                .connectTimeout(60, TimeUnit.SECONDS)
                                 .readTimeout(60, TimeUnit.SECONDS)
-                                .writeTimeout(30, TimeUnit.SECONDS)
+                                .writeTimeout(60, TimeUnit.SECONDS)
                                 .retryOnConnectionFailure(false) //<-- not necessary but useful!
                                 .build();
                         MediaType mediaType = MediaType.parse("application/json");

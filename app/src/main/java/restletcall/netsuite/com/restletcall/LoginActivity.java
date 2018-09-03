@@ -78,9 +78,10 @@ public class LoginActivity extends AppCompatActivity  {
                 editor.putString("entityid", entityid);
                 editor.apply();
                 String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
+//                String url = sharedPref.getString("url","https://4882653-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl");
                 String account = sharedPref.getString("account","4882653_SB1");
                 String email = sharedPref.getString("email","rest.user@nidlaundry.jp");
-                String sign = sharedPref.getString("sign","Netsuite12345");
+                String sign = sharedPref.getString("sign","Netsuite1234567");
                 if(!isOnline()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
                     toast.show();
@@ -95,6 +96,7 @@ public class LoginActivity extends AppCompatActivity  {
                     toast.show();
                 }else{
                     url = url+"?script=89&deploy=1&user_id="+entityid+"&mobile_pass="+password;
+                    Log.d("url",url);
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
