@@ -268,8 +268,8 @@ public class PrintPdfActivity extends AppCompatActivity {
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(cell);*/
                 //メンテカウント
-//                String salesMemo = item.getString("sales_memo");
-                String salesMemo = "";
+                String salesMemo = item.getString("sales_memo");
+//                String salesMemo = "";
                 if (salesMemo.isEmpty()) salesMemo = "";
                 cell = new PdfPCell(new Phrase(salesMemo, urFontName));
                 cell.setMinimumHeight(45);
@@ -450,7 +450,7 @@ public class PrintPdfActivity extends AppCompatActivity {
                 cell.setBorder(Rectangle.NO_BORDER);
                 headTable.addCell(cell);
                 //No
-                cell = new PdfPCell(new Phrase("No.", sFont));
+                cell = new PdfPCell(new Phrase("担当者", sFont));
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setBorder(Rectangle.NO_BORDER);
                 headTable.addCell(cell);
@@ -459,7 +459,7 @@ public class PrintPdfActivity extends AppCompatActivity {
                 cell.setBorder(Rectangle.NO_BORDER);
                 headTable.addCell(cell);
                 //row2
-                cell = new PdfPCell(new Phrase(headerInfo.getSama() + "  様", mFont));
+                cell = new PdfPCell(new Phrase(headerInfo.getSama() + "  様", sFont));
                 cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 cell.setBorder(Rectangle.NO_BORDER);
                 headTable.addCell(cell);
