@@ -30,8 +30,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:text="@string/setting"
                 android:gravity="center"
+                android:text="@string/setting"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
@@ -45,8 +45,8 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/textView3"
@@ -71,8 +71,8 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/textView4"
@@ -97,8 +97,8 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/textView5"
@@ -124,8 +124,8 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/textView6"
@@ -150,11 +150,63 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/textView7"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/loginId" />
+
+        <EditText
+            android:id="@+id/etLoginScriptId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/loginId"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/retletId" />
+
+        <EditText
+            android:id="@+id/etRetletScriptId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/retletId"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/textView9"
             android:layout_width="107dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -178,8 +230,8 @@
         android:layout_weight="2"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <Button
             android:id="@+id/bSave"

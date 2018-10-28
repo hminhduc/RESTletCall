@@ -3,7 +3,9 @@ package restletcall.netsuite.com.restletcall;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.webkit.MimeTypeMap;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.itextpdf.text.Chunk;
@@ -78,6 +81,7 @@ public class PrintPdfActivity extends AppCompatActivity {
         headerInfo.setKaisyuuDate(date_sales);
         Log.d("PrintPdfActivity", myResponse);
         FILE += "_" + headerInfo.getContractName() + ".pdf";
+//        FILE += "_" + ".pdf";
         File file = new File(FILE);
 
         try {
@@ -117,8 +121,31 @@ public class PrintPdfActivity extends AppCompatActivity {
             case R.id.action_print:
                 File file = new File(FILE);
                 try {
-                    OpenFile.openFile(PrintPdfActivity.this, file);
-                } catch (IOException e) {
+                    Log.d("OnOptionItemSelected Print", "Clicked");
+//                    OpenFile.openFile(PrintPdfActivity.this, file);
+                    /*Intent i=new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, AUTHORITY, f));
+
+                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(i);*/
+                    Intent intentForOpenFile = new Intent();
+                    intentForOpenFile.setAction(android.content.Intent.ACTION_VIEW);
+
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String ext = file.getName().substring(file.getName().indexOf(".") + 1);
+                    String type = mime.getMimeTypeFromExtension(ext);
+                    Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".restletcall.netsuite.com.restletcall", file);
+                    intentForOpenFile.setDataAndType(uri, type);
+                    intentForOpenFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    //Check if no app to open file
+                    /*PackageManager manager = mActivity.getPackageManager();
+                    List<ResolveInfo> info = manager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                    if (info.isEmpty())
+                        Toast.makeText(mActivity, "No app found to open this file", Toast.LENGTH_SHORT).show();
+                    else context.startActivity(intent);*/
+
+                    startActivity(intentForOpenFile);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return true;
@@ -136,7 +163,11 @@ public class PrintPdfActivity extends AppCompatActivity {
                 headerInfo.address2 = item.getString("address2");
                 headerInfo.no = item.getString("employer_name");
                 headerInfo.kaisyuuDate = item.getString("address2");
-                headerInfo.sama = item.getString("customer_name");
+                String customer_name = item.getString("customer_name");
+                if (customer_name.isEmpty() || customer_name == null)
+                    headerInfo.sama = "";
+                else
+                    headerInfo.sama = customer_name;
                 headerInfo.setContractName(item.getString("contract_altname"));
                 break;
             }

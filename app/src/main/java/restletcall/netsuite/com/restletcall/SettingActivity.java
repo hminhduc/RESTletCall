@@ -21,16 +21,22 @@ public class SettingActivity extends AppCompatActivity {
         final EditText etSign = (EditText) findViewById(R.id.etSign);
         final EditText etUrl = (EditText) findViewById(R.id.etUrl);
         final EditText etVersion = (EditText) findViewById(R.id.etVersion);
+        final EditText etLoginScriptId = (EditText) findViewById(R.id.etLoginScriptId);
+        final EditText etRetletScriptId = (EditText) findViewById(R.id.etRetletScriptId);
+
         final Button bSave = (Button) findViewById(R.id.bSave);
         final Button bCancle = (Button) findViewById(R.id.bCancle);
 
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-        sharedPref.getString("account","");
         etAccount.setText(sharedPref.getString("account","4882653_SB1"));
         etEmail.setText(sharedPref.getString("email","rest.user@nidlaundry.jp"));
         etSign.setText(sharedPref.getString("sign","Netsuite1234567"));
-        etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl"));
-        etVersion.setText(sharedPref.getString("version","0.0.1"));
+        etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com"));
+        etLoginScriptId.setText(sharedPref.getString("loginscriptid","89"));
+        etRetletScriptId.setText(sharedPref.getString("retletscriptid","99"));
+//        etUrl.setText(sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl?script=89"));
+//        etUrl.setText(sharedPref.getString("url","https://4882653-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=89"));
+        etVersion.setText(sharedPref.getString("version","0.0.3"));
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +45,8 @@ public class SettingActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String sign = etSign.getText().toString();
                 String url = etUrl.getText().toString();
+                String loginScriptId = etLoginScriptId.getText().toString();
+                String retletScriptId = etRetletScriptId.getText().toString();
                 String version = etVersion.getText().toString();
 
                 SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
@@ -47,9 +55,10 @@ public class SettingActivity extends AppCompatActivity {
                 editor.putString("email", email);
                 editor.putString("sign", sign);
                 editor.putString("url", url);
+                editor.putString("loginscriptid", loginScriptId);
+                editor.putString("retletscriptid", retletScriptId);
                 editor.putString("version", version);
                 editor.apply();
-                Log.d("accountVal", sharedPref.getString("account",""));
                 Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                 SettingActivity.this.startActivity(intent);
             }

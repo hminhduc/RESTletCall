@@ -20,11 +20,13 @@
     <string name="account">Account</string>
     <string name="save">保存</string>
     <string name="cancle">キャンセル</string>
-    <string name="url">接続先URL</string>
+    <string name="url">接続先サーバ</string>
     <string name="nlauth_signature">認証パスワード</string>
     <string name="nlauth_email">認証メールアドレス</string>
     <string name="nlauth_account">認証アカウント</string>
     <string name="signature">Signature</string>
+    <string name="loginId">LoginScriptID</string>
+    <string name="retletId">RetletID</string>
 
     <string name="accountVal"></string>
     <string name="emailVal"></string>
@@ -40,6 +42,4 @@
     <string name="no">No.</string>
     <string name="select_title">契約・回収日選択</string>
     <string name="version_info">バージョン</string>
-
-
 </resources>

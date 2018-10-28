@@ -29,6 +29,15 @@
         <activity android:name=".SelectActivity" />
         <activity android:name=".EditActivity" />
         <activity android:name=".CreateActivity"></activity>
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.restletcall.netsuite.com.restletcall"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_path" />
+        </provider>
     </application>
 
 </manifest>

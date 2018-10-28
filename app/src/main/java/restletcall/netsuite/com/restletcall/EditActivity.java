@@ -194,6 +194,7 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle extras = getIntent().getExtras();
                 String date_sales = extras.getString("date");
+                String entityid = extras.getString("entityid");
                 String myResponse = extras.getString("myResponse");
                 Log.d("EditActivity Save", myResponse);
                 pd = ProgressDialog.show(EditActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
@@ -209,9 +210,6 @@ public class EditActivity extends AppCompatActivity {
                             EditText etAmount = (EditText) row.findViewById(R.id.etAmount);
                             EditText etMemo = (EditText) row.findViewById(R.id.etMemo);
                             //set for rental_sales
-//                            JSONArray rentalSales = responseObject.getJSONArray("rental_sales");
-//                            JSONObject value = rentalSales.getJSONObject("values");
-//                            value.put("custrecord_nid_rental_sales_counter", etCounter.getText().toString());
                             //今回カウンター
                             responseObject.put("sales_counter", etCounter.getText().toString());
                             //カウンター差分
@@ -221,15 +219,14 @@ public class EditActivity extends AppCompatActivity {
                             //メンテカウンター
                             responseObject.put("sales_memo", etMemo.getText().toString());
                             responseObject.put("date_sales", date_sales);
-                            //value.put("custrecord_nid_rental_sales_memo", etDifference.getText().toString());
-//                            value.put("custrecord_nid_rental_sales_amount_d", etAmount.getText().toString());
-//                            value.put("custrecord_nid_rental_sales_memo", etMemo.getText().toString());
-
+                            responseObject.put("entityid", entityid);
                         }
                     }
                     //Connect to server
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String url = sharedPref.getString("url", "https://rest.netsuite.com");
+                    url = url + "/app/site/hosting/restlet.nl";
+//                    String url =  "https://4882653.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
                     String sign = sharedPref.getString("sign", "Netsuite1234567");
@@ -240,7 +237,8 @@ public class EditActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(EditActivity.this, "Please input setting", Toast.LENGTH_LONG);
                         toast.show();
                     } else {
-                        url = url + "?script=99&deploy=1";
+                        url = url + "?script=" + sharedPref.getString("retletscriptid", "99") + "&deploy=1";
+//                        url = url + "?script=119&deploy=1";
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
 //                        OkHttpClient client = new OkHttpClient();
                         OkHttpClient client = new OkHttpClient.Builder()

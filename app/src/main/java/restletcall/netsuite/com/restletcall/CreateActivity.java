@@ -192,7 +192,9 @@ public class CreateActivity extends AppCompatActivity {
                     }
                     //Connect to server
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String url = sharedPref.getString("url", "https://rest.netsuite.com");
+                    url = url + "/app/site/hosting/restlet.nl?script=";
+//                    String url =  "https://4882653.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
                     String sign = sharedPref.getString("sign", "Netsuite1234567");
@@ -203,7 +205,9 @@ public class CreateActivity extends AppCompatActivity {
                         Toast toast = Toast.makeText(CreateActivity.this, "Please input setting", Toast.LENGTH_LONG);
                         toast.show();
                     } else {
-                        url = url + "?script=99&deploy=1";
+                        url = url + sharedPref.getString("retletscriptid", "99");
+                        url = url + "&deploy=1";
+//                        url = url + "?script=119&deploy=1";
                         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
 //                        OkHttpClient client = new OkHttpClient();
                         OkHttpClient client = new OkHttpClient.Builder()

@@ -84,11 +84,18 @@ public class SelectActivity extends AppCompatActivity {
                     toast.show();
                 } else {
                     SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
-                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+//                    String url = sharedPref.getString("url", "https://rest.netsuite.com/app/site/hosting/restlet.nl");
+                    String url = sharedPref.getString("url", "https://rest.netsuite.com");
+                    url = url + "/app/site/hosting/restlet.nl?script=";
+                    url = url + sharedPref.getString("retletscriptid", "99");
+//                    String url =  "https://4882653.restlets.api.netsuite.com/app/site/hosting/restlet.nl";
                     String account = sharedPref.getString("account", "4882653_SB1");
                     String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
                     String sign = sharedPref.getString("sign", "Netsuite1234567");
-                    url = url + "?script=99&deploy=1&customer_name=" + customerString + "&collection_date=" + dateString;
+                    final String entityId = sharedPref.getString("entityid", "EMP0000013");
+                    url = url + "&deploy=1&customer_name=" + customerString + "&collection_date=" + dateString + "&entityid=" + entityId;
+//                    url = url + "?script=119&deploy=1&customer_name=" + customerString + "&collection_date=" + dateString;
+                    Log.d("SelectActivity url:", url);
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
@@ -135,6 +142,7 @@ public class SelectActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(SelectActivity.this, CreateActivity.class);
                                                 intent.putExtra("customer", contract_altname);
                                                 intent.putExtra("date", dateString);
+                                                intent.putExtra("entityid", entityId);
                                                 intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
                                             } else {// Display list
@@ -143,6 +151,7 @@ public class SelectActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(SelectActivity.this, ViewActivity.class);
                                                 intent.putExtra("customer", contract_altname);
                                                 intent.putExtra("date", dateString);
+                                                intent.putExtra("entityid", entityId);
                                                 intent.putExtra("myResponse", myResponse);
                                                 SelectActivity.this.startActivity(intent);
                                             }
@@ -416,6 +425,7 @@ public class SelectActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
     public class EditTextEx extends EditText {
 
         public EditTextEx(Context context, AttributeSet attrs) {

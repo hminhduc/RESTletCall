@@ -34,9 +34,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class LoginActivity extends AppCompatActivity  {
+public class LoginActivity extends AppCompatActivity {
     int i = 0;
     ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity  {
         SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
         final EditText etAccount = (EditText) findViewById(R.id.etAccount);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-        etAccount.setText(sharedPref.getString("entityid",""));
+        etAccount.setText(sharedPref.getString("entityid", ""));
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,32 +78,34 @@ public class LoginActivity extends AppCompatActivity  {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("entityid", entityid);
                 editor.apply();
-                String url = sharedPref.getString("url","https://rest.netsuite.com/app/site/hosting/restlet.nl");
-//                String url = sharedPref.getString("url","https://4882653-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl");
-                String account = sharedPref.getString("account","4882653_SB1");
-                String email = sharedPref.getString("email","rest.user@nidlaundry.jp");
-                String sign = sharedPref.getString("sign","Netsuite1234567");
-                if(!isOnline()) {
+                String url = sharedPref.getString("url", "https://rest.netsuite.com");
+                url = url + "/app/site/hosting/restlet.nl?script=" + sharedPref.getString("loginscriptid", "89");
+//                String url = sharedPref.getString("url","https://4882653-sb1.restlets.api.netsuite.com/app/site/hosting/restlet.nl?script=89");
+                String account = sharedPref.getString("account", "4882653_SB1");
+                String email = sharedPref.getString("email", "rest.user@nidlaundry.jp");
+                String sign = sharedPref.getString("sign", "Netsuite1234567");
+                if (!isOnline()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "ネットワークに接続されていません。", Toast.LENGTH_LONG);
                     toast.show();
-                }else if((url.equals("https://"))|| account.isEmpty() || email.isEmpty() || sign.isEmpty()){
+                } else if ((url.equals("https://")) || account.isEmpty() || email.isEmpty() || sign.isEmpty()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "Please input setting", Toast.LENGTH_LONG);
                     toast.show();
-                }else if(entityid.isEmpty()){
+                } else if (entityid.isEmpty()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "従業員IDを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
-                }else if(password.isEmpty()){
+                } else if (password.isEmpty()) {
                     Toast toast = Toast.makeText(LoginActivity.this, "パスワードを入力してください。", Toast.LENGTH_LONG);
                     toast.show();
-                }else{
-                    url = url+"?script=89&deploy=1&user_id="+entityid+"&mobile_pass="+password;
-                    Log.d("url",url);
+                } else {
+//                    url = url+"?script=89&deploy=1&user_id="+entityid+"&mobile_pass="+password;
+                    url = url + "&deploy=1&user_id=" + entityid + "&mobile_pass=" + password;
+                    Log.d("LoginActivity url", url);
                     HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                     OkHttpClient client = new OkHttpClient();
                     Request request = new Request.Builder()
                             .url(urlBuilder.build().toString())
-                            .addHeader("authorization", "NLAuth nlauth_account="+account+", nlauth_email="+email+", nlauth_signature="+sign)
-                            .addHeader("content-type","application/json")
+                            .addHeader("authorization", "NLAuth nlauth_account=" + account + ", nlauth_email=" + email + ", nlauth_signature=" + sign)
+                            .addHeader("content-type", "application/json")
                             .get()
                             .build();
                     pd = ProgressDialog.show(LoginActivity.this, "データ読み込み中......", "しばらくお待ちください。", true);
@@ -116,7 +119,7 @@ public class LoginActivity extends AppCompatActivity  {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             final String myResponse = response.body().string();
-                            Log.d("myResponse",myResponse);
+                            Log.d("LoginActivity myResponse", myResponse);
                             LoginActivity.this.runOnUiThread(new Runnable() {
 
                                 @Override
@@ -124,18 +127,28 @@ public class LoginActivity extends AppCompatActivity  {
                                     pd.dismiss();
                                     try {
                                         Object json = new JSONTokener(myResponse).nextValue();
-                                        if (json instanceof JSONObject){
+                                        if (json instanceof JSONObject) {
                                             JSONObject responseObject = new JSONObject(myResponse);
                                             JSONObject errorObject = responseObject.getJSONObject("error");
-                                            Toast toast = Toast.makeText(LoginActivity.this, errorObject.getString("message")+". Please change setting", Toast.LENGTH_LONG);
+                                            Toast toast = Toast.makeText(LoginActivity.this, errorObject.getString("message") + ". Please change setting", Toast.LENGTH_LONG);
                                             toast.show();
-                                        }else if (json instanceof JSONArray){
+                                        } else if (json instanceof JSONArray) {
                                             JSONArray responseArray = new JSONArray(myResponse);
-                                            if(responseArray.length() == 0){
+                                            if (responseArray.length() == 0) {
                                                 Toast toast = Toast.makeText(LoginActivity.this, "従業員IDまたはパスワードが正しくありません。", Toast.LENGTH_LONG);
                                                 toast.show();
-                                            }else{
-                                                Intent intent = new Intent(LoginActivity.this,SelectActivity.class);
+                                            } else {
+                                                //save login entityid to setting
+                                                JSONObject item = responseArray.getJSONObject(0);
+                                                JSONObject itemColumn = item.getJSONObject("columns");
+                                                SharedPreferences sharedPref = getSharedPreferences("my_data", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPref.edit();
+                                                Log.d("LoginActivity entityId", itemColumn.getString("entityid"));
+                                                editor.putString("entityid", itemColumn.getString("entityid"));
+                                                editor.apply();
+                                                //ridirect to SelectActivity
+                                                Intent intent = new Intent(LoginActivity.this, SelectActivity.class);
+                                                intent.putExtra("entityid", itemColumn.getString("entityid"));
                                                 LoginActivity.this.startActivity(intent);
                                             }
                                         }
@@ -163,10 +176,10 @@ public class LoginActivity extends AppCompatActivity  {
                         i = 0;
                     }
                 };
-                if(i == 1){
+                if (i == 1) {
                     handler.postDelayed(runnable, 1000);
                 }
-                if(i == 5){
+                if (i == 5) {
                     Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
                     LoginActivity.this.startActivity(intent);
                 }
